@@ -1,0 +1,162 @@
+<TestLabel@Label>
+    color: 0, 0, 0, 1
+    size_hint: 1, None
+    text_size: self.size
+    font_size: 14
+    valign: 'top'
+    padding: [20, 0]
+
+<MainStructure>:
+    canvas:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    orientation: 'vertical'
+    manager: sm
+    box_layout: box_layout
+    ScreenManager:
+        id: sm
+        Screen:
+            name: 'fidge'
+            BoxLayout:
+                orientation: 'vertical'
+                BoxLayout:
+                    size_hint: 1, .1
+                    padding: [20, 0]
+                    TitleLabel:
+                        text: 'Мой холодильник'
+                        size_hint: 1, 1
+                        padding: [0, 0]
+                    Button:
+                        color: 1, 0.58, 0.25, 1
+                        size_hint: .2, .5
+                        text: '+'
+                        font_size: 20
+                        background_normal: ''
+                ScrollView:
+                    effect_cls: 'ScrollEffect'
+                    bar_width: 7
+                    bar_color: .67, 0.67, 0.67, 1
+                    GridLayout:
+                        cols: 1
+                        size_hint: 1,None
+                        height: self.minimum_height
+                        TestLabel:
+                            text: 'Список продуктов:'
+                            font_size: 16
+                            padding: [20, 10]
+                            #valign: 'top'
+                        TestLabel:
+                            text: 'Продукт1'
+
+                        TestLabel:
+                            text: 'Продукт2'
+                        TestLabel:
+                            text: 'Продукт3'
+                        TestLabel:
+                            text: '5'
+                        TestLabel:
+                            text: '6'
+                        TestLabel:
+                            text: '69999999999'
+                        TestLabel:
+                            text: '5'
+                        TestLabel:
+                            text: '6'
+                        TestLabel:
+                            text: '69999999999'
+
+        Screen:
+            name: 'book'
+            BoxLayout:
+                orientation: 'vertical'
+                TitleLabel:
+                    text: 'Рецепты'
+                Label:
+                    text: 'text222'
+                    color: 0, 0, 0, 1
+        Screen:
+            name: 'find'
+            BoxLayout:
+                orientation: 'vertical'
+                TitleLabel:
+                    text: 'Find'
+                Label:
+                    text: 'text6547'
+                    color: 0, 0, 0, 1
+        Screen:
+            name: 'favorites'
+            BoxLayout:
+                orientation: 'vertical'
+                TitleLabel:
+                    text: 'title'
+                Label:
+                    text: 'afavja'
+                    color: 0, 0, 0, 1
+    BoxLayout:
+        id:box_layout
+        size_hint: 1, 0.10
+        button1: fidge
+        button2: book
+        button3: find
+        button4: favorites
+        MenuButton:
+            id: fidge
+            #text: 'fridge'
+            on_release:
+                root.manager.transition.duration = 0
+                root.manager.current = 'fidge'
+                root.box_layout.button2.color = (.67, 0.67, 0.67, 1)
+                root.box_layout.button3.color = (.67, 0.67, 0.67, 1)
+                root.box_layout.button4.color = (.67, 0.67, 0.67, 1)
+            Image:
+                source: "C:/Users/saraz/OneDrive/Рабочий стол/Новая папка/проект тмп/изображения/кальк2.png"
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+        MenuButton:
+            text: 'book'
+            id: book
+            on_release:
+                root.manager.transition.duration = 0
+                root.manager.current = 'book'
+                root.box_layout.button1.color = (.67, 0.67, 0.67, 1)
+                root.box_layout.button3.color = (.67, 0.67, 0.67, 1)
+                root.box_layout.button4.color = (.67, 0.67, 0.67, 1)
+        MenuButton:
+            id: find
+            text: 'find'
+            on_release:
+                root.manager.transition.duration = 0
+                root.manager.current = 'find'
+                root.box_layout.button1.color = (.67, 0.67, 0.67, 1)
+                root.box_layout.button2.color = (.67, 0.67, 0.67, 1)
+                root.box_layout.button4.color = (.67, 0.67, 0.67, 1)
+        MenuButton:
+            id: favorites
+            text: 'favorites'
+            on_release:
+                root.manager.transition.duration = 0
+                root.manager.current = 'favorites'
+                root.box_layout.button3.color = (.67, 0.67, 0.67, 1)
+                root.box_layout.button2.color = (.67, 0.67, 0.67, 1)
+                root.box_layout.button1.color = (.67, 0.67, 0.67, 1)
+
+<AllText@Label + Button>
+    font_name: 'Roboto'
+
+<TitleLabel@Label>
+    color: 1, 0.58, 0.25, 1
+    size_hint: 1, 0.1
+    text_size: self.size
+    font_size: 20
+    padding: [20, 0]
+
+<MenuButton@Button>
+    background_normal: ''
+    background_down: ''
+    background_color: 1, 1, 1, 1
+    color: .67, 0.67, 0.67, 1
+    on_release:
+        self.color = (1, 0.58, 0.25, 1)
