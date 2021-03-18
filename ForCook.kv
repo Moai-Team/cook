@@ -3,7 +3,7 @@
     size_hint: 1, None
     text_size: self.size
     font_size: 14
-    valign: 'top'
+    valign: 'center'
     padding: [20, 0]
 
 <MainStructure>:
@@ -24,17 +24,21 @@
                 orientation: 'vertical'
                 BoxLayout:
                     size_hint: 1, .1
-                    padding: [20, 0]
+                    padding: [0, 0, 50, 0]
                     TitleLabel:
                         text: 'Мой холодильник'
                         size_hint: 1, 1
-                        padding: [0, 0]
                     Button:
                         color: 1, 0.58, 0.25, 1
                         size_hint: .2, .5
+                        text_size: self.size
+                        valign: 'center'
+                        halign: 'right'
+                        #padding: [0, 0, 30, 0]
                         text: '+'
                         font_size: 20
                         background_normal: ''
+                        background_down: ''
                 ScrollView:
                     effect_cls: 'ScrollEffect'
                     bar_width: 7
@@ -48,25 +52,54 @@
                             font_size: 16
                             padding: [20, 10]
                             #valign: 'top'
-                        TestLabel:
-                            text: 'Продукт1'
-
-                        TestLabel:
-                            text: 'Продукт2'
-                        TestLabel:
-                            text: 'Продукт3'
-                        TestLabel:
-                            text: '5'
-                        TestLabel:
-                            text: '6'
-                        TestLabel:
-                            text: '69999999999'
-                        TestLabel:
-                            text: '5'
-                        TestLabel:
-                            text: '6'
-                        TestLabel:
-                            text: '69999999999'
+                        GridLayout:
+                            cols: 2
+                            size_hint: 1, None
+                            TestLabel:
+                                text: 'продукт'
+                                padding: [50, 0]
+                            DeleteGoodButton:
+                                id: delete_button
+                        GridLayout:
+                            cols: 2
+                            size_hint: 1, None
+                            TestLabel:
+                                text: 'продукт'
+                                padding: [50, 0]
+                            DeleteGoodButton:
+                                id: delete_button
+                        GridLayout:
+                            cols: 2
+                            size_hint: 1, None
+                            TestLabel:
+                                text: 'продукт'
+                                padding: [50, 0]
+                            DeleteGoodButton:
+                                id: delete_button
+                        GridLayout:
+                            cols: 2
+                            size_hint: 1, None
+                            TestLabel:
+                                text: 'продукт'
+                                padding: [50, 0]
+                            DeleteGoodButton:
+                                id: delete_button
+                        GridLayout:
+                            cols: 2
+                            size_hint: 1, None
+                            TestLabel:
+                                text: 'продукт'
+                                padding: [50, 0]
+                            DeleteGoodButton:
+                                id: delete_button
+                        GridLayout:
+                            cols: 2
+                            size_hint: 1, None
+                            TestLabel:
+                                text: 'продукт'
+                                padding: [50, 0]
+                            DeleteGoodButton:
+                                id: delete_button
 
         Screen:
             name: 'book'
@@ -143,7 +176,7 @@
                 root.box_layout.button2.color = (.67, 0.67, 0.67, 1)
                 root.box_layout.button1.color = (.67, 0.67, 0.67, 1)
 
-<AllText@Label + Button>
+<Label>
     font_name: 'Roboto'
 
 <TitleLabel@Label>
@@ -160,3 +193,14 @@
     color: .67, 0.67, 0.67, 1
     on_release:
         self.color = (1, 0.58, 0.25, 1)
+
+<DeleteGoodButton@Button>
+    background_normal: ''
+    background_down: ''
+    text: 'x'
+    color: 1, 0.58, 0.25, 1
+    font_size: 18
+    text_size: self.size
+    valign: 'center'
+    halign: 'right'
+    padding: [50, 0]
