@@ -4,7 +4,6 @@ import os
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.dropdown import DropDown
 
 class MainStructure(FloatLayout):
     pass
