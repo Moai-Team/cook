@@ -18,6 +18,9 @@
     box_layout: box_layout
     ScreenManager:
         id: sm
+
+        #-----------------------First Screen-------------------------
+
         Screen:
             name: 'fidge'
             BoxLayout:
@@ -101,15 +104,45 @@
                             DeleteGoodButton:
                                 id: delete_button
 
+        #------------------Second Screen----------------------------
+
         Screen:
             name: 'book'
             BoxLayout:
                 orientation: 'vertical'
                 TitleLabel:
                     text: 'Рецепты'
-                Label:
-                    text: 'text222'
-                    color: 0, 0, 0, 1
+                ScreenManager:
+                    id: category_manager
+                    Screen:
+                        name: 'category_menu'
+                        ScrollView:
+                            effect_cls: 'ScrollEffect'
+                            bar_width: 7
+                            bar_color: .67, 0.67, 0.67, 1
+
+                            GridLayout:
+                                cols: 1
+                                size_hint: 1,None
+                                height: self.minimum_height
+                                Button:
+                                    text: '11111'
+                                    size_hint: 1, None
+                                    on_release: category_manager.current = 'blanks'
+                                Button:
+                                    text: '11111'
+                                    size_hint: 1, None
+                                    on_release: category_manager.current = 'first_category'
+                                Button:
+                                    text: '11111'
+                                    size_hint: 1, None
+                                    on_release: category_manager.current = 'first_category'
+                    Screen:
+                        name: 'blanks'
+                        Button:
+                            text: '11111'
+                            on_release: category_manager.current = 'category_menu'
+    #-------------------------------Third Screen----------------------------------------
         Screen:
             name: 'find'
             BoxLayout:
@@ -119,6 +152,9 @@
                 Label:
                     text: 'text6547'
                     color: 0, 0, 0, 1
+
+    #-----------------------------Forth Screen---------------------------------------
+
         Screen:
             name: 'favorites'
             BoxLayout:
@@ -128,6 +164,9 @@
                 Label:
                     text: 'afavja'
                     color: 0, 0, 0, 1
+
+    #------------------------Menu----------------------------------
+
     BoxLayout:
         id:box_layout
         size_hint: 1, 0.10
@@ -176,6 +215,8 @@
                 root.box_layout.button2.color = (.67, 0.67, 0.67, 1)
                 root.box_layout.button1.color = (.67, 0.67, 0.67, 1)
 
+
+
 <Label>
     font_name: 'Roboto'
 
@@ -204,3 +245,26 @@
     valign: 'center'
     halign: 'right'
     padding: [50, 0]
+
+<CategoryTitleButton@Button>
+    background_normal: ''
+    background_down: ''
+    color: 0, 0, 0, 1
+    text_size: self.width, 100
+    valign: 'center'
+    padding: [20, 0]
+    size_hint: 1, None
+
+<RecipeCategory@DropDown>
+    size_hint: 1, 1
+    auto_dismiss: False
+    auto_dismiss: 'BooleanProperty(False)'
+
+<CategoryRecipeButton@Button>
+    size_hint: 1, None
+    background_normal: ''
+    background_down: ''
+    background_color: .67, 0.67, 0.67, 1
+    text_size: self.size
+    valign: 'center'
+    padding: [20, 0]
