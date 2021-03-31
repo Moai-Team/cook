@@ -35,9 +35,6 @@
                         background_normal: ''
                         background_down: ''
                 ScrollView:
-                    effect_cls: 'ScrollEffect'
-                    bar_width: 7
-                    bar_color: .67, 0.67, 0.67, 1
                     GridLayout:
                         cols: 1
                         size_hint: 1,None
@@ -117,192 +114,379 @@
                     Screen:
                         name: 'category_menu'
                         ScrollView:
-                            effect_cls: 'ScrollEffect'
-                            bar_width: 7
-                            bar_color: .67, 0.67, 0.67, 1
-
                             GridLayout:
                                 cols: 1
                                 size_hint: 1,None
                                 height: self.minimum_height
                                 CategoryNameButton:
                                     text: 'Заготовки'
-                                    on_release: category_manager.current = 'blanks'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'blanks'
                                 CategoryNameButton:
                                     text: 'Выпечка и десерты'
-                                    on_release: category_manager.current = 'desserts'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'desserts'
                                 CategoryNameButton:
                                     text: 'Главные блюда'
-                                    on_release: category_manager.current = 'main_dishes'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'main_dishes'
                                 CategoryNameButton:
                                     text: 'Завтраки'
-                                    on_release: category_manager.current = 'breakfasts'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'breakfasts'
                                 CategoryNameButton:
                                     text: 'Салаты'
-                                    on_release: category_manager.current = 'salads'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'salads'
                                 CategoryNameButton:
                                     text: 'Супы'
-                                    on_release: category_manager.current = 'soups'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'soups'
                                 CategoryNameButton:
                                     text: 'Паста и пицца'
-                                    on_release: category_manager.current = 'pizza'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'pizza'
                                 CategoryNameButton:
                                     text: 'Закуски'
-                                    on_release: category_manager.current = 'snacks'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'snacks'
                                 CategoryNameButton:
                                     text: 'Сэндвичи'
-                                    on_release: category_manager.current = 'sandwiches'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'sandwiches'
                                 CategoryNameButton:
                                     text: 'Ризотто'
-                                    on_release: category_manager.current = 'risotto'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'risotto'
                                 CategoryNameButton:
                                     text: 'Напитки'
-                                    on_release: category_manager.current = 'drinks'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'drinks'
                                 CategoryNameButton:
                                     text: 'Соусы и маринады'
-                                    on_release: category_manager.current = 'sauces'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'sauces'
                                 CategoryNameButton:
                                     text: 'Бульоны'
-                                    on_release: category_manager.current = 'bouillons'
+                                    on_release:
+                                        category_manager.transition.direction = 'left'
+                                        category_manager.current = 'bouillons'
                                 Label:
                                     size_hint: 1, None
                                     text: ''
                     Screen:
                         name: 'blanks'
                         ScrollView:
-                            effect_cls: 'ScrollEffect'
-                            bar_width: 7
-                            bar_color: .67, 0.67, 0.67, 1
-                            GridLayout:
-                                cols: 1
-                                size_hint: 1,None
-                                height: self.minimum_height
+                            CategoryGridLayout:
                                 GridLayout:
                                     cols: 2
                                     size_hint: 1, None
-                                    Button:
-                                        size_hint: .05, 1
-                                        text: '<-'
-                                        color: 0, 0, 0, 1
-                                        background_normal: ''
-                                        background_down: ''
-                                        on_release: category_manager.current = 'category_menu'
-                                    Label:
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.current = 'category_menu'
+                                            category_manager.transition.direction = 'right'
+                                    TitleCategoryLabel:
                                         text: 'Заготовки'
-                                        size_hint: 1, 1
-                                        color: 0, 0, 0, 1
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
                                         text_size: self.size
                                         valign: 'center'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будет рецепт'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будет рецепт'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будет рецепт'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будет рецепт'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будет рецепт'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будет рецепт'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будет рецепт'
+                                        padding: [20, 0]
 
                     Screen:
                         name: 'desserts'
-                        Button:
-                            text: '11111'
-                            on_release: category_manager.current = 'category_menu'
+                        ScrollView:
+                            CategoryGridLayout:
+                                GridLayout:
+                                    cols: 2
+                                    size_hint: 1, None
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.current = 'category_menu'
+                                            category_manager.transition.direction = 'right'
+
+                                    TitleCategoryLabel:
+                                        text: 'Выпечка и десерты'
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
+                                        text_size: self.size
+                                        valign: 'center'
+                                        padding: [20, 0]
                     Screen:
                         name: 'main_dishes'
-                        Button:
-                            text: '11111'
-                            on_release: category_manager.current = 'category_menu'
+                        ScrollView:
+                            CategoryGridLayout:
+                                GridLayout:
+                                    cols: 2
+                                    size_hint: 1, None
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.current = 'category_menu'
+                                            category_manager.transition.direction = 'right'
+                                    TitleCategoryLabel:
+                                        text: 'Основные блюда'
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
+                                        text_size: self.size
+                                        valign: 'center'
+                                        padding: [20, 0]
                     Screen:
                         name: 'breakfasts'
-                        Button:
-                            text: '11111'
-                            on_release: category_manager.current = 'category_menu'
+                        ScrollView:
+                            CategoryGridLayout:
+                                GridLayout:
+                                    cols: 2
+                                    size_hint: 1, None
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.transition.direction = 'right'
+                                            category_manager.current = 'category_menu'
+                                    TitleCategoryLabel:
+                                        text: 'Завтраки'
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
+                                        text_size: self.size
+                                        valign: 'center'
+                                        padding: [20, 0]
                     Screen:
                         name: 'salads'
-                        Button:
-                            text: '11111'
-                            on_release: category_manager.current = 'category_menu'
+                        ScrollView:
+                            CategoryGridLayout:
+                                GridLayout:
+                                    cols: 2
+                                    size_hint: 1, None
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.transition.direction = 'right'
+                                            category_manager.current = 'category_menu'
+                                    TitleCategoryLabel:
+                                        text: 'Салаты'
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
+                                        text_size: self.size
+                                        valign: 'center'
+                                        padding: [20, 0]
                     Screen:
                         name: 'soups'
-                        Button:
-                            text: '11111'
-                            on_release: category_manager.current = 'category_menu'
+                        ScrollView:
+                            CategoryGridLayout:
+                                GridLayout:
+                                    cols: 2
+                                    size_hint: 1, None
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.transition.direction = 'right'
+                                            category_manager.current = 'category_menu'
+                                    TitleCategoryLabel:
+                                        text: 'Супы'
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
+                                        text_size: self.size
+                                        valign: 'center'
+                                        padding: [20, 0]
                     Screen:
                         name: 'pizza'
-                        Button:
-                            text: '11111'
-                            on_release: category_manager.current = 'category_menu'
+                        ScrollView:
+                            CategoryGridLayout:
+                                GridLayout:
+                                    cols: 2
+                                    size_hint: 1, None
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.transition.direction = 'right'
+                                            category_manager.current = 'category_menu'
+                                    TitleCategoryLabel:
+                                        text: 'Паста и пицца'
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
+                                        text_size: self.size
+                                        valign: 'center'
+                                        padding: [20, 0]
                     Screen:
                         name: 'snacks'
-                        Button:
-                            text: '11111'
-                            on_release: category_manager.current = 'category_menu'
+                        ScrollView:
+                            CategoryGridLayout:
+                                GridLayout:
+                                    cols: 2
+                                    size_hint: 1, None
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.transition.direction = 'right'
+                                            category_manager.current = 'category_menu'
+                                    TitleCategoryLabel:
+                                        text: 'Закуски'
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
+                                        text_size: self.size
+                                        valign: 'center'
+                                        padding: [20, 0]
                     Screen:
                         name: 'sandwiches'
-                        Button:
-                            text: '11111'
-                            on_release: category_manager.current = 'category_menu'
+                        ScrollView:
+                            CategoryGridLayout:
+                                GridLayout:
+                                    cols: 2
+                                    size_hint: 1, None
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.transition.direction = 'right'
+                                            category_manager.current = 'category_menu'
+                                    TitleCategoryLabel:
+                                        text: 'Сэндвичи'
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
+                                        text_size: self.size
+                                        valign: 'center'
+                                        padding: [20, 0]
                     Screen:
                         name: 'risotto'
-                        Button:
-                            text: '11111'
-                            on_release: category_manager.current = 'category_menu'
+                        ScrollView:
+                            CategoryGridLayout:
+                                GridLayout:
+                                    cols: 2
+                                    size_hint: 1, None
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.transition.direction = 'right'
+                                            category_manager.current = 'category_menu'
+                                    TitleCategoryLabel:
+                                        text: 'Ризотто'
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
+                                        text_size: self.size
+                                        valign: 'center'
+                                        padding: [20, 0]
                     Screen:
                         name: 'drinks'
-                        Button:
-                            text: '11111'
-                            on_release: category_manager.current = 'category_menu'
+                        ScrollView:
+                            CategoryGridLayout:
+                                GridLayout:
+                                    cols: 2
+                                    size_hint: 1, None
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.transition.direction = 'right'
+                                            category_manager.current = 'category_menu'
+                                    TitleCategoryLabel:
+                                        text: 'Напитки'
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
+                                        text_size: self.size
+                                        valign: 'center'
+                                        padding: [20, 0]
                     Screen:
                         name: 'sauces'
-                        Button:
-                            text: '11111'
-                            on_release: category_manager.current = 'category_menu'
+                        ScrollView:
+                            CategoryGridLayout:
+                                GridLayout:
+                                    cols: 2
+                                    size_hint: 1, None
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.transition.direction = 'right'
+                                            category_manager.current = 'category_menu'
+                                    TitleCategoryLabel:
+                                        text: 'Соусы'
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
+                                        text_size: self.size
+                                        valign: 'center'
+                                        padding: [20, 0]
                     Screen:
                         name: 'bouillons'
-                        Button:
-                            text: '11111'
-                            on_release: category_manager.current = 'category_menu'
+                        ScrollView:
+                            CategoryGridLayout:
+                                GridLayout:
+                                    cols: 2
+                                    size_hint: 1, None
+                                    BackCategoryButton:
+                                        on_release:
+                                            category_manager.transition.direction = 'right'
+                                            category_manager.current = 'category_menu'
+                                    TitleCategoryLabel:
+                                        text: 'Бульоны'
+                                GridLayout:
+                                    cols:1
+                                    size_hint: 1, None
+                                    Label:
+                                        size_hint: 1, None
+                                        color: 1, 0, 0, 1
+                                        text: 'Здесь будут рецепты'
+                                        text_size: self.size
+                                        valign: 'center'
+                                        padding: [20, 0]
     #-------------------------------Third Screen----------------------------------------
         Screen:
             name: 'find'
@@ -424,3 +608,27 @@
     font_size: 16
     valign: 'center'
     padding: [20, 0]
+
+<BackCategoryButton@Button>
+    size_hint: .05, 1
+    text: '<-'
+    color: 0, 0, 0, 1
+    background_normal: ''
+    background_down: ''
+    on_release:
+
+<TitleCategoryLabel@Label>
+    size_hint: 1, 1
+    color: 0, 0, 0, 1
+    text_size: self.size
+    valign: 'center'
+
+<CategoryGridLayout@GridLayout>
+    cols: 1
+    size_hint: 1,None
+    height: self.minimum_height
+
+<ScrollView>
+    effect_cls: 'ScrollEffect'
+    bar_width: 7
+    bar_color: .67, 0.67, 0.67, 1
