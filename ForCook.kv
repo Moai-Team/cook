@@ -29,13 +29,16 @@
                         text_size: self.size
                         valign: 'center'
                         halign: 'right'
-                        #padding: [0, 0, 30, 0]
                         text: '+'
                         font_size: 20
                         background_normal: ''
                         background_down: ''
+                        on_release:
+                            good_list.add_good()
+
                 ScrollView:
-                    GridLayout:
+                    GoodListGridLayout:
+                        id: good_list
                         cols: 1
                         size_hint: 1,None
                         height: self.minimum_height
@@ -43,63 +46,36 @@
                             text: 'Список продуктов:'
                             font_size: 16
                             padding: [20, 10]
-                            #valign: 'top'
                         GridLayout:
+                            id: good1
+                            cols: 2
+                            size_hint: 1, None
+                            TestLabel:
+                                text: 'продукт111'
+                                padding: [50, 0]
+                            DeleteGoodButton:
+                                on_release:
+                                    good_list.delete_good(good1)
+                        GridLayout:
+                            id: good2
                             cols: 2
                             size_hint: 1, None
                             TestLabel:
                                 text: 'продукт'
                                 padding: [50, 0]
                             DeleteGoodButton:
-                                id: delete_button
+                                on_release:
+                                    good_list.delete_good(good2)
                         GridLayout:
-                            cols: 2
+                            id: good3
+                            cols: 3
                             size_hint: 1, None
                             TestLabel:
                                 text: 'продукт'
                                 padding: [50, 0]
                             DeleteGoodButton:
-                                id: delete_button
-                        GridLayout:
-                            cols: 2
-                            size_hint: 1, None
-                            TestLabel:
-                                text: 'продукт'
-                                padding: [50, 0]
-                            DeleteGoodButton:
-                                id: delete_button
-                        GridLayout:
-                            cols: 2
-                            size_hint: 1, None
-                            TestLabel:
-                                text: 'продукт'
-                                padding: [50, 0]
-                            DeleteGoodButton:
-                                id: delete_button
-                        GridLayout:
-                            cols: 2
-                            size_hint: 1, None
-                            TestLabel:
-                                text: 'продукт'
-                                padding: [50, 0]
-                            DeleteGoodButton:
-                                id: delete_button
-                        GridLayout:
-                            cols: 2
-                            size_hint: 1, None
-                            TestLabel:
-                                text: 'продукт22'
-                                padding: [50, 0]
-                            DeleteGoodButton:
-                                id: delete_button
-                        GridLayout:
-                            cols: 2
-                            size_hint: 1, None
-                            TestLabel:
-                                text: ''
-                                padding: [50, 0]
-                            DeleteGoodButton:
-                                id: delete_button
+                                on_release:
+                                    good_list.delete_good(good3)
 
         #------------------Second Screen----------------------------
 

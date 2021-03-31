@@ -4,9 +4,37 @@ import os
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.button import Button
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
+
 
 class MainStructure(FloatLayout):
     pass
+
+class TestLabel(Label):
+    pass
+
+class DeleteGoodButton(Button):
+    pass
+
+class GoodListGridLayout(GridLayout):
+    def __init__(self, **args):
+        super().__init__()
+        self.good_number = 3
+
+    def delete_good(self, id_name):
+        self.remove_widget(id_name)
+        self.good_number -= 1
+
+    def add_good(self):
+        self.good_number += 1
+        id_name = 'good{}'.format(self.good_number)
+        gl = GridLayout(cols = 2, size_hint = (1, None))
+        gl.add_widget(TestLabel(text = 'new widget!', padding = [50, 0]))
+        gl.add_widget(DeleteGoodButton())
+        self.add_widget(gl)
+
 
 class ForCookApp(App):
     def build(self):
