@@ -7,6 +7,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
+from kivy.base import runTouchApp
+from kivy.uix.spinner import Spinner
 
 
 class MainStructure(FloatLayout):
@@ -32,7 +34,8 @@ class GoodListGridLayout(GridLayout):
         id_name = 'good{}'.format(self.good_number)
         gl = GridLayout(cols = 2, size_hint = (1, None))
         gl.add_widget(TestLabel(text = 'new widget!', padding = [50, 0]))
-        gl.add_widget(DeleteGoodButton())
+        dbutton = DeleteGoodButton(on_release = self.remove_widget(gl))
+        gl.add_widget(dbutton)
         self.add_widget(gl)
 
 

@@ -55,7 +55,7 @@
                                 padding: [50, 0]
                             DeleteGoodButton:
                                 on_release:
-                                    good_list.delete_good(good1)
+                                    good_list.remove_widget(self.parent)
                         GridLayout:
                             id: good2
                             cols: 2
@@ -469,10 +469,41 @@
             BoxLayout:
                 orientation: 'vertical'
                 TitleLabel:
-                    text: 'Find'
-                Label:
-                    text: 'text6547'
-                    color: 0, 0, 0, 1
+                    text: 'Поиск рецептов'
+                ScrollView:
+                    BoxLayout:
+                        orientation: 'vertical'
+                        TestLabel:
+                            text: 'Фильтры:'
+                            font_size: 16
+                            padding: [20, 10]
+                        BoxLayout:
+                            TestLabel:
+                                text: 'Категория'
+                                font_size: 14
+                            Spinner:
+                                text: 'Любая'
+                                font_size: 14
+                                values: 'Любая', 'Завтраки', 'Обеды', 'Закуски', 'Напитки', 'Закуски', 'Десерты'
+                                size_hint: None, None
+                                size: 100, 44
+
+                        BoxLayout:
+                            TestLabel:
+                                text: 'Кухня'
+                                font_size: 14
+                            Spinner:
+                                text: 'Любая'
+                                font_size: 14
+                                values: 'Любая', 'Мексиканская', 'Итальянская', 'Русская', 'Грузинская', 'Японская', 'Китайская'
+                                size_hint: None, None
+                                size: 100, 44
+                        Label:
+                            text: ''
+                            color: 0, 0, 0, 1
+
+
+
 
     #-----------------------------Forth Screen---------------------------------------
 
