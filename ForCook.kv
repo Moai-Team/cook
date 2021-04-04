@@ -35,6 +35,7 @@
                         background_down: ''
                         on_release:
                             good_list.add_good()
+                            Factory.GoodPopup().open()
 
                 ScrollView:
                     GoodListGridLayout:
@@ -615,8 +616,49 @@
     size_hint: 1, None
     TestLabel:
         text: 'продукт111'
-        padding: [50, 0]
+        padding: [30, 0]
     DeleteGoodButton:
         on_release:
             self.parent.parent.remove_widget(self.parent)
 
+#:import Factory kivy.factory.Factory
+<GoodPopup@Popup>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    size_hint: .7, .7
+    title: 'Новый продукт'
+    title_align: 'center'
+    title_color: 1, 0.58, 0.25, 1
+    separator_color: 1, 1, 1, 1
+    separator_height: 2
+
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        orientation: 'vertical'
+        TextInput:
+            size_hint: 1, .1
+            text: 'testest'
+        Label:
+            text: ''
+        Button:
+            id: bt
+            size_hint: 1, .1
+            text: 'Add!'
+            on_release: root.dismiss()
+
+<Label@GoodPopup>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
