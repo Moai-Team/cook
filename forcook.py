@@ -20,22 +20,15 @@ class TestLabel(Label):
 class DeleteGoodButton(Button):
     pass
 
+class GoodGridLayout(GridLayout):
+    pass
+
 class GoodListGridLayout(GridLayout):
     def __init__(self, **args):
         super().__init__()
-        self.good_number = 3
-
-    def delete_good(self, id_name):
-        self.remove_widget(id_name)
-        self.good_number -= 1
 
     def add_good(self):
-        self.good_number += 1
-        id_name = 'good{}'.format(self.good_number)
-        gl = GridLayout(cols = 2, size_hint = (1, None))
-        gl.add_widget(TestLabel(text = 'new widget!', padding = [50, 0]))
-        dbutton = DeleteGoodButton(on_release = self.remove_widget(gl))
-        gl.add_widget(dbutton)
+        gl = GoodGridLayout()
         self.add_widget(gl)
 
 
