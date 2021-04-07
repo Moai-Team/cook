@@ -31,6 +31,21 @@ class GoodListGridLayout(GridLayout):
         gl = GoodGridLayout()
         self.add_widget(gl)
 
+class DeleteFavButton(Button):
+    pass
+
+class FavoritListGridLayout(GridLayout):
+    def __init__(self, **args):
+        super().__init__()
+        self.fav_number = 6
+
+    def delete_fav(self, id_name):
+        self.remove_widget(id_name)
+        self.fav_number -= 1
+
+#    def add_fav(self):
+        #через бд
+
 
 class ForCookApp(App):
     def build(self):

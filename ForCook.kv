@@ -483,10 +483,87 @@
             BoxLayout:
                 orientation: 'vertical'
                 TitleLabel:
-                    text: 'title'
-                Label:
-                    text: 'afavja'
-                    color: 0, 0, 0, 1
+                    text: 'Избранные рецепты'
+
+                ScrollView:
+                    FavoritListGridLayout:
+                        id: fav_list
+                        cols: 1
+                        height: self.minimum_height
+                        Label:
+                            size_hint: 1, .3
+                            text: ''
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            id: fav1
+                            cols: 2
+                            size_hint: 1, .8
+                            ListLabel:
+                                text: 'Борщьч'
+                                padding: [50, 0]
+                            ListLabel:
+                                text: 'ингредиенты'
+                                padding: [60, 0]
+                            DeleteFavButton:
+                                on_release:
+                                    fav_list.delete_fav(fav1)
+                        BoxLayout:
+                            id: fav2
+                            cols: 3
+                            size_hint: 1, .8
+                            ListLabel:
+                                text: 'Салатег "Цезаръ"'
+                                padding: [50, 0]
+                            DeleteFavButton:
+                                on_release:
+                                    fav_list.delete_fav(fav2)
+                        BoxLayout:
+                            id: fav3
+                            cols: 4
+                            size_hint: 1, .8
+                            ListLabel:
+                                text: 'Котлетки по-флотельски'
+                                padding: [50, 0]
+                            DeleteFavButton:
+                                on_release:
+                                    fav_list.delete_fav(fav3)
+
+                        BoxLayout:
+                            id: fav4
+                            cols: 5
+                            size_hint: 1, .8
+                            ListLabel:
+                                text: 'Мамины пельмешки из морозилки'
+                                padding: [50, 0]
+                            DeleteFavButton:
+                                on_release:
+                                    fav_list.delete_fav(fav4)
+
+                        BoxLayout:
+                            id: fav5
+                            cols: 6
+                            size_hint: 1, .8
+                            ListLabel:
+                                text: 'Кисель из пакетика'
+                                padding: [50, 0]
+                            DeleteFavButton:
+                                on_release:
+                                    fav_list.delete_fav(fav5)
+
+                        BoxLayout:
+                            id: fav6
+                            cols: 7
+                            size_hint: 1, .8
+                            ListLabel:
+                                text: 'Горячий сок из сока'
+                                padding: [50, 0]
+                            DeleteFavButton:
+                                on_release:
+                                    fav_list.delete_fav(fav6)
+
+                        Label:
+                            size_hint: 1, None
+                            text: ''
 
     #------------------------Menu----------------------------------
 
@@ -663,3 +740,23 @@
         Rectangle:
             size: self.size
             pos: self.pos
+
+<DeleteFavButton@Button>
+    background_normal: ''
+    background_down: ''
+    text: '><'
+    color: 1, 0.58, 0.25, 1
+    font_size: 18
+    text_size: self.size
+    valign: 'top'
+    halign: 'right'
+    padding: [50, 0]
+
+
+<ListLabel@Label>
+    color: 0, 0, 0, 1
+    size_hint: 1, .5
+    text_size: self.size
+    font_size: 14
+    valign: 'top'
+    padding: [20, 0]
