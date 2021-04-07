@@ -1,5 +1,7 @@
 import sqlite3
 import os
+from models.datebase import DATABASE_NAME
+import create_datebase as db_creator
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -31,8 +33,17 @@ class GoodListGridLayout(GridLayout):
         self.add_widget(gl)
 
 class GoodTextInput(TextInput):
+    '''def find_ingredients(self, name):
+        cursor.execute("SELECT name FROM ingredients")
+        results = cursor.fetchall()
+        print(results)
+        return results
+
     def print_text(self, label):
-        print(self.text)
+        ingredients_list = self.find_ingredients(self.text)
+        for i in ingredients_list:
+            print(i)'''
+
 
 class DeleteFavButton(Button):
     pass
@@ -50,32 +61,29 @@ class FavoritListGridLayout(GridLayout):
         #через бд
 
 
+
+
+#------------------------DATE BASE------------------------------------
+
+
+
+db_scheme = 'date_scheme.sql'
+db_connection = sqlite3.connect('date_base.db')
+cursor = db_connection.cursor()
+
+
+
+
+
+
 class ForCookApp(App):
     def build(self):
         return MainStructure()
 
-#------------------------DATE BASE------------------------------------
-
-db_name = 'date_base.db'
-db_is_created = os.path.exists(db_name)
-db_scheme = 'date_scheme.sql'
-db_connection = sqlite3.connect('date_base.db')
-
-with open(db_scheme, 'rt') as scheme_file:
-    my_scheme = scheme_file.read()
-
-db_connection.executescript(my_scheme)
-
-'''recipe_id = input('id: ')
-recipe_name = input('name: ')
-
-sql.execute('SELECT id FROM recipe')
-if sql.fetchone() is None:
-    sql.execute(f"INSERT INTO recipe VALUES ('?, ?')", (recipe_id, recipe_name))
-    db.commit()
-else:
-    print('still')
-'''
-
 if __name__ == '__main__':
+    db_is_created = os.path.exists(DATABASE_NAME)
+    if not db_is_created:
+        db_creator.create_db()
+
+
     ForCookApp().run()
