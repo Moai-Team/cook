@@ -7,8 +7,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
-from kivy.base import runTouchApp
-from kivy.uix.spinner import Spinner
+from kivy.uix.textinput import TextInput
 
 
 class MainStructure(FloatLayout):
@@ -30,6 +29,10 @@ class GoodListGridLayout(GridLayout):
     def add_good(self):
         gl = GoodGridLayout()
         self.add_widget(gl)
+
+class GoodTextInput(TextInput):
+    def print_text(self, label):
+        print(self.text)
 
 class DeleteFavButton(Button):
     pass

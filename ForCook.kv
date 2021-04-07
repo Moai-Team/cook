@@ -721,11 +721,13 @@
                 size: self.size
                 pos: self.pos
         orientation: 'vertical'
-        TextInput:
+        GoodTextInput:
             size_hint: 1, .1
             multiline: False
             focus: True
+            on_text_validate: self.print_text(find_good_list)
         Label:
+            id: find_good_list
             text: ''
         Button:
             id: bt
