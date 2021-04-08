@@ -1,7 +1,12 @@
 import sqlite3
 import os
-from models.datebase import DATABASE_NAME
+from models.datebase import DATABASE_NAME, Session
 import create_datebase as db_creator
+from sqlalchemy import and_
+from models.ingredients import Ingredients, recipe_has_ingredients_table
+from models.recipe import Recipe
+from models.time import Time
+from models.categories import Categories
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -67,9 +72,9 @@ class FavoritListGridLayout(GridLayout):
 
 
 
-db_scheme = 'date_scheme.sql'
+'''db_scheme = 'date_scheme.sql'
 db_connection = sqlite3.connect('date_base.db')
-cursor = db_connection.cursor()
+cursor = db_connection.cursor()'''
 
 
 
@@ -85,5 +90,8 @@ if __name__ == '__main__':
     if not db_is_created:
         db_creator.create_db()
 
+    session = Session()
+    for it in session.query(Recipe.name).join(Time).filter(Time.minutes == 15):
+        print(it)
 
     ForCookApp().run()

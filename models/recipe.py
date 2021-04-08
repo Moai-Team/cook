@@ -23,4 +23,5 @@ class Recipe(Base):
         self.advice = advice
 
     def __repr__(self):
-        return 'Название: ', self.name, " ",  self.id
+        return [self.id, " ",  self.name, " ", self.img_folder_name, " ", self.calories, " ", self.instruction, " ", \
+               self.time_id, " ", self.history, " ", self.advice]
