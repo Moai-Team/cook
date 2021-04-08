@@ -700,6 +700,7 @@
 #:import Factory kivy.factory.Factory
 <GoodPopup@Popup>:
     id: good_popup
+    name: self.set_ref(self)
     canvas.before:
         Color:
             rgba: 1, 1, 1, 1
@@ -714,6 +715,7 @@
     separator_height: 2
 
     BoxLayout:
+        name_child: good_popup.get_ref()
         canvas:
             Color:
                 rgba: 1, 1, 1, 1
@@ -769,4 +771,6 @@
     text_size: self.size
     valign: 'center'
     padding: [20, 0]
+    on_release:
+        self.parent.parent.parent.name_child.dismiss()
 

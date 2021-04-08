@@ -34,7 +34,11 @@ class FindIngredientsButton(Button):
     pass
 
 class GoodPopup(Popup):
-    pass
+    ref = ""
+    def set_ref(self, name):
+        self.ref = name
+    def get_ref(self):
+        return self.ref
 
 class GoodListGridLayout(GridLayout):
     def __init__(self, **args):
