@@ -670,7 +670,6 @@
     color: 0, 0, 0, 1
     background_normal: ''
     background_down: ''
-    on_release:
 
 <TitleCategoryLabel@Label>
     size_hint: 1, 1
@@ -700,6 +699,7 @@
 
 #:import Factory kivy.factory.Factory
 <GoodPopup@Popup>:
+    id: good_popup
     canvas.before:
         Color:
             rgba: 1, 1, 1, 1
@@ -721,19 +721,18 @@
                 size: self.size
                 pos: self.pos
         orientation: 'vertical'
+        find_good_list: find_good_list
         GoodTextInput:
             size_hint: 1, .1
             multiline: False
             focus: True
-            on_text_validate: self.print_text(find_good_list)
-        Label:
-            id: find_good_list
-            text: ''
-        Button:
-            id: bt
-            size_hint: 1, .1
-            text: 'Add!'
-            on_release: root.dismiss()
+            on_text_validate: self.print_find_ingredients(find_good_list)
+        ScrollView:
+            GridLayout:
+                id: find_good_list
+                cols: 1
+                size_hint: 1, None
+                height: self.minimum_height
 
 <Label@GoodPopup>:
     canvas.before:
@@ -746,14 +745,13 @@
 <DeleteFavButton@Button>
     background_normal: ''
     background_down: ''
-    text: '><'
+    text: 'x'
     color: 1, 0.58, 0.25, 1
     font_size: 18
     text_size: self.size
     valign: 'top'
     halign: 'right'
     padding: [50, 0]
-
 
 <ListLabel@Label>
     color: 0, 0, 0, 1
@@ -762,3 +760,13 @@
     font_size: 14
     valign: 'top'
     padding: [20, 0]
+
+<FindIngredientsButton@Button>
+    color: 0, 0, 0, 1
+    size_hint: 1, None
+    background_normal: ''
+    #background_down: ''
+    text_size: self.size
+    valign: 'center'
+    padding: [20, 0]
+

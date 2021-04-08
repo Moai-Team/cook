@@ -15,6 +15,7 @@ from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
+from kivy.uix.popup import Popup
 
 
 class MainStructure(FloatLayout):
@@ -29,6 +30,12 @@ class DeleteGoodButton(Button):
 class GoodGridLayout(GridLayout):
     pass
 
+class FindIngredientsButton(Button):
+    pass
+
+class GoodPopup(Popup):
+    pass
+
 class GoodListGridLayout(GridLayout):
     def __init__(self, **args):
         super().__init__()
@@ -38,17 +45,25 @@ class GoodListGridLayout(GridLayout):
         self.add_widget(gl)
 
 class GoodTextInput(TextInput):
-    '''def find_ingredients(self, name):
-        cursor.execute("SELECT name FROM ingredients")
-        results = cursor.fetchall()
-        print(results)
-        return results
+    def find_ingredients(self, name):
+        result = []
+        for it in session.query(Ingredients.name).filter(Ingredients.name.like(f'%{name}%')):
+            result += [it]
+        return self.get_dict_list_from_result(result)
 
-    def print_text(self, label):
-        ingredients_list = self.find_ingredients(self.text)
+    def print_find_ingredients(self, label):
+        ingredients_list = self.find_ingredients(self.text.lower())
+
+        label.clear_widgets()
         for i in ingredients_list:
-            print(i)'''
+            label.add_widget(FindIngredientsButton(text = i['name']))
 
+    def get_dict_list_from_result(self, result):
+        list_dict = []
+        for i in result:
+            i_dict = i._asdict()
+            list_dict.append(i_dict)
+        return list_dict
 
 class DeleteFavButton(Button):
     pass
@@ -66,21 +81,6 @@ class FavoritListGridLayout(GridLayout):
         #через бд
 
 
-
-
-#------------------------DATE BASE------------------------------------
-
-
-
-'''db_scheme = 'date_scheme.sql'
-db_connection = sqlite3.connect('date_base.db')
-cursor = db_connection.cursor()'''
-
-
-
-
-
-
 class ForCookApp(App):
     def build(self):
         return MainStructure()
@@ -89,9 +89,6 @@ if __name__ == '__main__':
     db_is_created = os.path.exists(DATABASE_NAME)
     if not db_is_created:
         db_creator.create_db()
-
     session = Session()
-    for it in session.query(Recipe.name).join(Time).filter(Time.minutes == 15):
-        print(it)
 
     ForCookApp().run()

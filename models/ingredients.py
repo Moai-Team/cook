@@ -15,7 +15,5 @@ class Ingredients(Base):
     name = Column(String)
     recipe = relationship('Recipe', secondary = recipe_has_ingredients_table, backref='recipe_ingredients')
 
-    def __repr__(self):
-        return [self.id, " ", self.name]
 
 
