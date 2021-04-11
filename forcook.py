@@ -30,6 +30,9 @@ class DeleteGoodButton(Button):
 class GoodGridLayout(GridLayout):
     pass
 
+class EmptyLabel(Label):
+    pass
+
 class FindIngredientsButton(Button):
     pass
 
@@ -40,13 +43,21 @@ class GoodListGridLayout(GridLayout):
         super().__init__()
 
     def add_good(self, text):
+        if (text in self.good_list):
+            return
+        if not self.good_list:
+            self.remove_widget(self.children[2])
         gl = GoodGridLayout()
         tl = TestLabel(text = text, padding = [30, 0], color=(0, 0, 0, 1))
         gl.add_widget(tl, 1)
-        self.add_widget(gl, 1)
+        self.add_widget(gl, 2)
         self.good_list += [text]
-        print(self.good_list)
+        self.children[1].children[0].size = (30, 30)
 
+    def empty_list(self):
+        if len(self.good_list) == 1:
+            self.add_widget(EmptyLabel(), 2)
+            self.children[1].children[0].size = (0, 0)
 
 class GoodTextInput(TextInput):
     def find_ingredients(self, name):
@@ -59,6 +70,9 @@ class GoodTextInput(TextInput):
     def print_find_ingredients(self, label):
         ingredients_list = self.find_ingredients(self.text.lower())
         label.clear_widgets()
+        if not ingredients_list:
+            label.add_widget(Label(text="Ингредиент не найден", color=(0, 0, 0, 1), size_hint=(1, None), font_size=14))
+            return
         for i in ingredients_list:
             label.add_widget(FindIngredientsButton(text = i['name']))
 
@@ -81,9 +95,6 @@ class GoodPopup(Popup):
 
     def good_list_id(self, name):
         self.good_list_name += [name]
-
-    def good_list_id_get(self):
-        print("get", self.good_list_name)
 
 
 class DeleteFavButton(Button):

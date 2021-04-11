@@ -38,8 +38,6 @@
                         on_release:
                             Factory.GoodPopup().open()
                             Factory.GoodPopup().good_list_id(self.parent.parent.child_2.child_1)
-                            print("+")
-
                 ScrollView:
                     id: scroll_view
                     child_1: good_list
@@ -52,6 +50,18 @@
                             text: 'Список продуктов:'
                             font_size: 16
                             padding: [20, 10]
+                        EmptyLabel:
+                            id: empty
+                        Button:
+                            size_hint: .1, None
+                            padding: [50, 0]
+                            background_down: ''
+                            background_normal: ''
+                            Image:
+                                source: "img/loupe.png"
+                                center_x: self.parent.center_x
+                                center_y: self.parent.center_y
+                                size: 0, 0
                         Label:
                             size_hint: 1, None
 
@@ -694,12 +704,23 @@
     bar_width: 7
     bar_color: .67, 0.67, 0.67, 1
 
+<EmptyLabel@Label>:
+    text: 'Пустота поглотила ваш холодильник.\nИ вашу душу.'
+    halign: 'center'
+    italic: True
+    multiline: True
+    color: (0, 0, 0, .5)
+    size_hint: 1, None
+
 <GoodGridLayout@GridLayout>
     cols: 2
     size_hint: 1, None
     DeleteGoodButton:
         on_release:
+            self.parent.parent.empty_list()
+            self.parent.parent.good_list.remove(self.parent.children[1].text)
             self.parent.parent.remove_widget(self.parent)
+
 
 #:import Factory kivy.factory.Factory
 <GoodPopup@Popup>:
@@ -778,6 +799,7 @@
     padding: [20, 0]
 
     on_release:
-        self.parent.parent.parent.name_child.good_list_name[1].add_good(self.text)
+        Factory.GoodPopup.good_list_name[1].add_good(self.text)
         self.parent.parent.parent.name_child.dismiss()
+
 
