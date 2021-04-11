@@ -460,36 +460,38 @@
                     text: 'Поиск рецептов'
                 ScrollView:
                     BoxLayout:
+                        size_hint: 1, None
                         orientation: 'vertical'
-                        TestLabel:
-                            text: 'Фильтры:'
-                            font_size: 16
-                            padding: [20, 10]
                         BoxLayout:
-                            TestLabel:
-                                text: 'Категория'
-                                font_size: 14
+                            padding: [10, 0]
+                            size_hint: 1, None
                             Spinner:
                                 text: 'Категория'
                                 font_size: 14
+                                color: 1, .58, .25, 1
                                 values: 'Любая', 'Завтраки', 'Обеды', 'Закуски', 'Напитки', 'Закуски', 'Десерты'
-                                size_hint: None, None
+                                size_hint: 1, None
                                 size: 100, 44
-
-                        BoxLayout:
-                            TestLabel:
-                                text: 'Кухня'
-                                font_size: 14
+                                option_cls: 'FiltersSpinnerOption'
+                                background_normal: 'img/button_background1.png'
                             Spinner:
                                 text: 'Кухня'
                                 font_size: 14
+                                color: 1, .58, .25, 1
                                 values: 'Любая', 'Мексиканская', 'Итальянская', 'Русская', 'Грузинская', 'Японская', 'Китайская'
-                                size_hint: None, None
+                                size_hint: 1, None
                                 size: 100, 44
-                        Label:
-                            text: ''
-                            color: 0, 0, 0, 1
-
+                                option_cls: 'FiltersSpinnerOption'
+                                background_normal: 'img/button_background1.png'
+                            Spinner:
+                                text: 'Меню'
+                                font_size: 14
+                                color: 1, .58, .25, 1
+                                values: 'Любое меню', 'Безглютеновое', 'Вегетарианское', 'Веганское','Безлактозное', 'Детское', 'Низкокалорийное', 'Постное', 'При диабете'
+                                size_hint: 1, None
+                                size: 100, 44
+                                option_cls: 'FiltersSpinnerOption'
+                                background_normal: 'img/button_background1.png'
 
 
 
@@ -705,7 +707,7 @@
     bar_color: .67, 0.67, 0.67, 1
 
 <EmptyLabel@Label>:
-    text: 'Пустота поглотила ваш холодильник.\nИ вашу душу.'
+    text: 'Пустота поглотила ваш холодильник'
     halign: 'center'
     italic: True
     multiline: True
@@ -802,4 +804,8 @@
         Factory.GoodPopup.good_list_name[1].add_good(self.text)
         self.parent.parent.parent.name_child.dismiss()
 
-
+<FiltersSpinnerOption@SpinnerOption>
+    background_normal: ''
+    background_color: 0, 0, 0, .1
+    color: 0, 0, 0, 1
+    font_size: 12
