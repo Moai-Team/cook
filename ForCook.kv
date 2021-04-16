@@ -458,40 +458,73 @@
                 orientation: 'vertical'
                 TitleLabel:
                     text: 'Поиск рецептов'
-                ScrollView:
+                BoxLayout:
+                    size_hint: 1, 1
+                    orientation: 'vertical'
                     BoxLayout:
-                        size_hint: 1, None
-                        orientation: 'vertical'
-                        BoxLayout:
-                            padding: [10, 0]
+                        padding: [20, 20]
+                        size_hint: 1, .17
+                        Spinner:
+                            text: 'Категория'
+                            font_size: 14
+                            color: 1, .58, .25, 1
+                            values: 'Любая категория', 'Завтраки', 'Обеды', 'Закуски', 'Напитки', 'Закуски', 'Десерты'
+                            size: 100, 44
+                            option_cls: 'FiltersSpinnerOption'
+                            background_normal: 'img/button_background1.png'
+                        Spinner:
+                            text: 'Кухня'
+                            font_size: 14
+                            color: 1, .58, .25, 1
+                            values: 'Любая кухня', 'Мексиканская', 'Итальянская', 'Русская', 'Грузинская', 'Японская', 'Китайская'
+                            size: 100, 44
+                            option_cls: 'FiltersSpinnerOption'
+                            background_normal: 'img/button_background1.png'
+                        Spinner:
+                            text: 'Меню'
+                            font_size: 14
+                            color: 1, .58, .25, 1
+                            values: 'Любое меню', 'Безглютеновое', 'Вегетарианское', 'Веганское','Безлактозное', 'Детское', 'Низкокалорийное', 'Постное', 'При диабете'
+                            size: 100, 44
+                            option_cls: 'FiltersSpinnerOption'
+                            background_normal: 'img/button_background1.png'
+                    BoxLayout:
+                        size_hint: 1, .1
+                        CheckBox:
+                            size_hint: .3, 1
+                            color: 1, .58, .25, 1
+                        Label:
+                            text: 'Только выбранные ингредиенты'
+                            color: 0, 0, 0, 1
+                            font_size: 14
+                            text_size: self.size
+                            valign: 'center'
+                    ScrollView:
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, .1
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        GoodListGridLayout:
                             size_hint: 1, None
-                            Spinner:
-                                text: 'Категория'
-                                font_size: 14
-                                color: 1, .58, .25, 1
-                                values: 'Любая', 'Завтраки', 'Обеды', 'Закуски', 'Напитки', 'Закуски', 'Десерты'
+                            height: self.minimum_height
+                            cols: 1
+                            BoxLayout:
                                 size_hint: 1, None
-                                size: 100, 44
-                                option_cls: 'FiltersSpinnerOption'
-                                background_normal: 'img/button_background1.png'
-                            Spinner:
-                                text: 'Кухня'
-                                font_size: 14
-                                color: 1, .58, .25, 1
-                                values: 'Любая', 'Мексиканская', 'Итальянская', 'Русская', 'Грузинская', 'Японская', 'Китайская'
+                                padding: [10, 10]
+                                Button:
+                                    text: '+'
+                                    font_size: 18
+                                    color: 1, .58, .25, 1
+                                    background_normal: ''
+                                    background_down: ''
+                                    on_release:
+                                        Factory.FindPopup().open()
+                                        Factory.FindPopup().good_list_id(self.parent.parent)
+                            Label:
                                 size_hint: 1, None
-                                size: 100, 44
-                                option_cls: 'FiltersSpinnerOption'
-                                background_normal: 'img/button_background1.png'
-                            Spinner:
-                                text: 'Меню'
-                                font_size: 14
-                                color: 1, .58, .25, 1
-                                values: 'Любое меню', 'Безглютеновое', 'Вегетарианское', 'Веганское','Безлактозное', 'Детское', 'Низкокалорийное', 'Постное', 'При диабете'
-                                size_hint: 1, None
-                                size: 100, 44
-                                option_cls: 'FiltersSpinnerOption'
-                                background_normal: 'img/button_background1.png'
+                                opacity: 0
 
 
 
@@ -724,6 +757,14 @@
             self.parent.parent.remove_widget(self.parent)
 
 
+<GoodGlobalGridLayout>
+    cols: 2
+    size_hint: 1, None
+    DeleteGoodButton:
+        on_release:
+            self.parent.parent.good_list.remove(self.parent.children[1].text)
+            self.parent.parent.remove_widget(self.parent)
+
 #:import Factory kivy.factory.Factory
 <GoodPopup@Popup>:
     id: good_popup
@@ -809,3 +850,55 @@
     background_color: 0, 0, 0, .1
     color: 0, 0, 0, 1
     font_size: 12
+
+<FindIngredientsGlobalButton@Button>
+    color: 0, 0, 0, 1
+    size_hint: 1, None
+    background_normal: ''
+    #background_down: ''
+    text_size: self.size
+    valign: 'center'
+    padding: [20, 0]
+
+    on_release:
+        Factory.FindPopup.good_list_name[1].add_good_global(self.text)
+        self.parent.parent.parent.name_child.dismiss()
+
+<FindPopup@Popup>
+    id: good_popup
+    name: self.set_ref(self)
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    size_hint: .7, .7
+    title: 'Новый продукт'
+    title_align: 'center'
+    title_color: 1, 0.58, 0.25, 1
+    separator_color: 1, 1, 1, 1
+    separator_height: 2
+
+    BoxLayout:
+        name_child: good_popup.get_ref()
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        orientation: 'vertical'
+        find_good_list: find_good_list
+        GoodTextInput:
+            size_hint: 1, .1
+            multiline: False
+            focus: True
+            on_text_validate:
+                self.print_find_ingredients_global(find_good_list)
+        ScrollView:
+            GridLayout:
+                id: find_good_list
+                cols: 1
+                size_hint: 1, None
+                height: self.minimum_height

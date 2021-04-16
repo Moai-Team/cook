@@ -30,10 +30,16 @@ class DeleteGoodButton(Button):
 class GoodGridLayout(GridLayout):
     pass
 
+class GoodGlobalGridLayout(GridLayout):
+    pass
+
 class EmptyLabel(Label):
     pass
 
 class FindIngredientsButton(Button):
+    pass
+
+class FindIngredientsGlobalButton(Button):
     pass
 
 class GoodListGridLayout(GridLayout):
@@ -53,6 +59,15 @@ class GoodListGridLayout(GridLayout):
         self.add_widget(gl, 2)
         self.good_list += [text]
         self.children[1].children[0].size = (30, 30)
+
+    def add_good_global(self, text):
+        if (text in self.good_list):
+            return
+        gl = GoodGlobalGridLayout(padding=[10, 10])
+        tl = TestLabel(text=text, padding=[30, 0], color=(0, 0, 0, 1))
+        gl.add_widget(tl, 1)
+        self.add_widget(gl, 1)
+        self.good_list += [text]
 
     def empty_list(self):
         if len(self.good_list) == 1:
@@ -74,7 +89,16 @@ class GoodTextInput(TextInput):
             label.add_widget(Label(text="Ингредиент не найден", color=(0, 0, 0, 1), size_hint=(1, None), font_size=14))
             return
         for i in ingredients_list:
-            label.add_widget(FindIngredientsButton(text = i['name']))
+            label.add_widget(FindIngredientsGlobalButton(text = i['name']))
+
+    def print_find_ingredients_global(self, label):
+        ingredients_list = self.find_ingredients(self.text.lower())
+        label.clear_widgets()
+        if not ingredients_list:
+            label.add_widget(Label(text="Ингредиент не найден", color=(0, 0, 0, 1), size_hint=(1, None), font_size=14))
+            return
+        for i in ingredients_list:
+            label.add_widget(FindIngredientsGlobalButton(text = i['name']))
 
     def get_dict_list_from_result(self, result):
         list_dict = []
@@ -96,6 +120,18 @@ class GoodPopup(Popup):
     def good_list_id(self, name):
         self.good_list_name += [name]
 
+class FindPopup(Popup):
+    ref = ""
+    good_list_name = [object()]
+
+    def set_ref(self, name):
+        self.ref = name
+
+    def get_ref(self):
+        return self.ref
+
+    def good_list_id(self, name):
+        self.good_list_name += [name]
 
 class DeleteFavButton(Button):
     pass
@@ -111,7 +147,7 @@ class FavoritListGridLayout(GridLayout):
 
 #    def add_fav(self):
         #через бд
-
+# это написал кто-то слишком умный
 
 class ForCookApp(App):
     def build(self):
