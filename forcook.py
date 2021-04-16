@@ -43,34 +43,37 @@ class FindIngredientsGlobalButton(Button):
     pass
 
 class GoodListGridLayout(GridLayout):
-    good_list = []
+    good_list_1 = []
+    good_list_2 = []
 
     def __init__(self, **args):
         super().__init__()
 
     def add_good(self, text):
-        if (text in self.good_list):
+        if (text in self.good_list_1):
             return
-        if not self.good_list:
+        if not self.good_list_1:
             self.remove_widget(self.children[2])
         gl = GoodGridLayout()
         tl = TestLabel(text = text, padding = [30, 0], color=(0, 0, 0, 1))
         gl.add_widget(tl, 1)
         self.add_widget(gl, 2)
-        self.good_list += [text]
+        self.good_list_1 += [text]
         self.children[1].children[0].size = (30, 30)
+        print(self.good_list_1)
 
     def add_good_global(self, text):
-        if (text in self.good_list):
+        if (text in self.good_list_2):
             return
         gl = GoodGlobalGridLayout(padding=[10, 10])
         tl = TestLabel(text=text, padding=[30, 0], color=(0, 0, 0, 1))
         gl.add_widget(tl, 1)
         self.add_widget(gl, 1)
-        self.good_list += [text]
+        self.good_list_2 += [text]
+        print(self.good_list_2)
 
     def empty_list(self):
-        if len(self.good_list) == 1:
+        if len(self.good_list_1) == 1:
             self.add_widget(EmptyLabel(), 2)
             self.children[1].children[0].size = (0, 0)
 
@@ -89,7 +92,7 @@ class GoodTextInput(TextInput):
             label.add_widget(Label(text="Ингредиент не найден", color=(0, 0, 0, 1), size_hint=(1, None), font_size=14))
             return
         for i in ingredients_list:
-            label.add_widget(FindIngredientsGlobalButton(text = i['name']))
+            label.add_widget(FindIngredientsButton(text = i['name']))
 
     def print_find_ingredients_global(self, label):
         ingredients_list = self.find_ingredients(self.text.lower())

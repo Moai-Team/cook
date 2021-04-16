@@ -753,7 +753,7 @@
     DeleteGoodButton:
         on_release:
             self.parent.parent.empty_list()
-            self.parent.parent.good_list.remove(self.parent.children[1].text)
+            self.parent.parent.good_list_1.remove(self.parent.children[1].text)
             self.parent.parent.remove_widget(self.parent)
 
 
@@ -762,7 +762,7 @@
     size_hint: 1, None
     DeleteGoodButton:
         on_release:
-            self.parent.parent.good_list.remove(self.parent.children[1].text)
+            self.parent.parent.good_list_2.remove(self.parent.children[1].text)
             self.parent.parent.remove_widget(self.parent)
 
 #:import Factory kivy.factory.Factory
