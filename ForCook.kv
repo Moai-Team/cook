@@ -463,7 +463,7 @@
                     orientation: 'vertical'
                     BoxLayout:
                         padding: [20, 20]
-                        size_hint: 1, .17
+                        size_hint: 1, .23
                         Spinner:
                             text: 'Категория'
                             font_size: 14
@@ -513,6 +513,7 @@
                             BoxLayout:
                                 size_hint: 1, None
                                 padding: [10, 10]
+                                spacing: 7
                                 Button:
                                     text: '+'
                                     font_size: 18
@@ -522,9 +523,31 @@
                                     on_release:
                                         Factory.FindPopup().open()
                                         Factory.FindPopup().good_list_id(self.parent.parent)
+                                Button:
+                                    background_normal: ''
+                                    background_down: ''
+                                    on_release:
+                                        self.parent.parent.remove_all_widget_global()
+                                    Image:
+                                        source: 'img/delete_all_ingredients_global.png'
+                                        center_x: self.parent.center_x
+                                        center_y: self.parent.center_y
+                                        size: 45, 45
+
                             Label:
                                 size_hint: 1, None
                                 opacity: 0
+                    Button:
+                        size_hint: .2, .3
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        background_normal: ''
+                        background_down: ''
+                        Image:
+                            source: 'img/loupe.png'
+                            center_x: self.parent.center_x
+                            center_y: self.parent.center_y*1.5
+                            size: 30, 30
+
 
 
 

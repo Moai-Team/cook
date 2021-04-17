@@ -77,6 +77,11 @@ class GoodListGridLayout(GridLayout):
             self.add_widget(EmptyLabel(), 2)
             self.children[1].children[0].size = (0, 0)
 
+    def remove_all_widget_global(self):
+        for i in range(len(self.good_list_2)):
+            self.remove_widget(self.children[1])
+        self.good_list_2.clear()
+
 class GoodTextInput(TextInput):
     def find_ingredients(self, name):
         result = []
