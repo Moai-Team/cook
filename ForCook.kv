@@ -454,101 +454,150 @@
     #-------------------------------Third Screen----------------------------------------
         Screen:
             name: 'find'
-            BoxLayout:
-                orientation: 'vertical'
-                TitleLabel:
-                    text: 'Поиск рецептов'
-                BoxLayout:
-                    size_hint: 1, 1
-                    orientation: 'vertical'
+            ScreenManager:
+                Screen:
+                    name: 'find_main'
                     BoxLayout:
-                        padding: [20, 20]
-                        size_hint: 1, .23
-                        Spinner:
-                            text: 'Категория'
-                            font_size: 14
-                            color: 1, .58, .25, 1
-                            values: 'Любая категория', 'Завтраки', 'Обеды', 'Закуски', 'Напитки', 'Закуски', 'Десерты'
-                            size: 100, 44
-                            option_cls: 'FiltersSpinnerOption'
-                            background_normal: 'img/button_background1.png'
-                        Spinner:
-                            text: 'Кухня'
-                            font_size: 14
-                            color: 1, .58, .25, 1
-                            values: 'Любая кухня', 'Мексиканская', 'Итальянская', 'Русская', 'Грузинская', 'Японская', 'Китайская'
-                            size: 100, 44
-                            option_cls: 'FiltersSpinnerOption'
-                            background_normal: 'img/button_background1.png'
-                        Spinner:
-                            text: 'Меню'
-                            font_size: 14
-                            color: 1, .58, .25, 1
-                            values: 'Любое меню', 'Безглютеновое', 'Вегетарианское', 'Веганское','Безлактозное', 'Детское', 'Низкокалорийное', 'Постное', 'При диабете'
-                            size: 100, 44
-                            option_cls: 'FiltersSpinnerOption'
-                            background_normal: 'img/button_background1.png'
-                    BoxLayout:
-                        size_hint: 1, .1
-                        CheckBox:
-                            size_hint: .3, 1
-                            color: 1, .58, .25, 1
-                        Label:
-                            text: 'Только выбранные ингредиенты'
-                            color: 0, 0, 0, 1
-                            font_size: 14
-                            text_size: self.size
-                            valign: 'center'
-                    ScrollView:
-                        canvas.before:
-                            Color:
-                                rgba: 0, 0, 0, .1
-                            Rectangle:
-                                size: self.size
-                                pos: self.pos
-                        GoodListGridLayout:
-                            size_hint: 1, None
-                            height: self.minimum_height
-                            cols: 1
-                            BoxLayout:
-                                size_hint: 1, None
-                                padding: [10, 10]
-                                spacing: 7
-                                Button:
-                                    text: '+'
-                                    font_size: 18
-                                    color: 1, .58, .25, 1
-                                    background_normal: ''
-                                    background_down: ''
-                                    on_release:
-                                        Factory.FindPopup().open()
-                                        Factory.FindPopup().good_list_id(self.parent.parent)
-                                Button:
-                                    background_normal: ''
-                                    background_down: ''
-                                    on_release:
-                                        self.parent.parent.remove_all_widget_global()
-                                    Image:
-                                        source: 'img/delete_all_ingredients_global.png'
-                                        center_x: self.parent.center_x
-                                        center_y: self.parent.center_y
-                                        size: 45, 45
-
+                        size_hint: 1, 1
+                        orientation: 'vertical'
+                        BoxLayout:
+                            size_hint: 1, .16
                             Label:
+                                text: 'Поиск рецептов'
+                                color: 1, 0.58, 0.25, 1
+                                size_hint: 1, 1
+                                text_size: self.size
+                                font_size: 20
+                                padding: [20, 0]
+                        BoxLayout:
+                            padding: [20, 20]
+                            size_hint: 1, .23
+                            Spinner:
+                                text: 'Категория'
+                                font_size: 14
+                                color: 1, .58, .25, 1
+                                values: 'Любая категория', 'Завтраки', 'Обеды', 'Закуски', 'Напитки', 'Закуски', 'Десерты'
+                                size: 100, 44
+                                option_cls: 'FiltersSpinnerOption'
+                                background_normal: 'img/button_background1.png'
+                            Spinner:
+                                text: 'Кухня'
+                                font_size: 14
+                                color: 1, .58, .25, 1
+                                values: 'Любая кухня', 'Мексиканская', 'Итальянская', 'Русская', 'Грузинская', 'Японская', 'Китайская'
+                                size: 100, 44
+                                option_cls: 'FiltersSpinnerOption'
+                                background_normal: 'img/button_background1.png'
+                            Spinner:
+                                text: 'Меню'
+                                font_size: 14
+                                color: 1, .58, .25, 1
+                                values: 'Любое меню', 'Безглютеновое', 'Вегетарианское', 'Веганское','Безлактозное', 'Детское', 'Низкокалорийное', 'Постное', 'При диабете'
+                                size: 100, 44
+                                option_cls: 'FiltersSpinnerOption'
+                                background_normal: 'img/button_background1.png'
+                        BoxLayout:
+                            size_hint: 1, .1
+                            CheckBox:
+                                size_hint: .3, 1
+                                color: 1, .58, .25, 1
+                            Label:
+                                text: 'Только выбранные ингредиенты'
+                                color: 0, 0, 0, 1
+                                font_size: 14
+                                text_size: self.size
+                                valign: 'center'
+                        ScrollView:
+                            canvas.before:
+                                Color:
+                                    rgba: 0, 0, 0, .1
+                                Rectangle:
+                                    size: self.size
+                                    pos: self.pos
+                            GoodListGridLayout:
                                 size_hint: 1, None
-                                opacity: 0
-                    Button:
-                        size_hint: .2, .3
-                        pos_hint: {'center_x': .5, 'center_y': .5}
-                        background_normal: ''
-                        background_down: ''
-                        Image:
-                            source: 'img/loupe.png'
-                            center_x: self.parent.center_x
-                            center_y: self.parent.center_y*1.5
-                            size: 30, 30
+                                height: self.minimum_height
+                                cols: 1
+                                BoxLayout:
+                                    size_hint: 1, None
+                                    padding: [10, 10]
+                                    spacing: 7
+                                    Button:
+                                        text: '+'
+                                        font_size: 18
+                                        color: 1, .58, .25, 1
+                                        background_normal: ''
+                                        background_down: ''
+                                        on_release:
+                                            Factory.FindPopup().open()
+                                            Factory.FindPopup().good_list_id(self.parent.parent)
+                                    Button:
+                                        background_normal: ''
+                                        background_down: ''
+                                        on_release:
+                                            self.parent.parent.remove_all_widget_global()
+                                        Image:
+                                            source: 'img/delete_all_ingredients_global.png'
+                                            center_x: self.parent.center_x
+                                            center_y: self.parent.center_y
+                                            size: 45, 45
 
+                                Label:
+                                    size_hint: 1, None
+                                    opacity: 0
+                        FindGlobalButton:
+                            size_hint: .2, .3
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_normal: ''
+                            background_down: ''
+                            on_release:
+                                self.filters = [self.parent.children[-2].children[2].text.lower(),
+                                self.parent.children[-2].children[1].text.lower(),
+                                self.parent.children[-2].children[0].text.lower()]
+                                self.ingredients = self.parent.children[1].children[-1].good_list_2
+                                self.only_this_setting = self.parent.children[-3].children[-1].active
+                                self.parent.parent.parent.transition.direction = 'left'
+                                self.parent.parent.parent.current = 'preview_recipes'
+                                self.find_recipes(self.parent.parent.parent.children[0].children[-1].children[0].children[0])
 
+                            Image:
+                                source: 'img/loupe.png'
+                                center_x: self.parent.center_x
+                                center_y: self.parent.center_y*1.5
+                                size: 30, 30
+
+                Screen:
+                    name: 'preview_recipes'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        BoxLayout:
+                            size_hint: 1, .1
+                            Label:
+                                text: 'Результаты поиска'
+                                color: 1, 0.58, 0.25, 1
+                                size_hint: 1, 1
+                                text_size: self.size
+                                font_size: 20
+                                padding: [20, 0]
+                            Button:
+                                size_hint: .4, 1
+                                background_down: ''
+                                background_normal: ''
+                                on_release:
+                                    self.parent.parent.parent.parent.transition.direction = 'right'
+                                    self.parent.parent.parent.parent.current = 'find_main'
+                                Image:
+                                    source: 'img/back_button.png'
+                                    center_x: self.parent.center_x
+                                    center_y: self.parent.center_y-10
+                                    size: 30, 20
+                        ScrollView:
+                            GridLayout:
+                                cols: 1
+                                size_hint: 1, None
+                                height: self.minimum_height
+                                Label:
+                                    size_hint: 1, None
 
 
     #-----------------------------Forth Screen---------------------------------------
@@ -925,3 +974,15 @@
                 cols: 1
                 size_hint: 1, None
                 height: self.minimum_height
+
+<RecipeNamePreviewLabel>
+    color: 0, 0, 0, 1
+    text_size: self.size
+    font_size: 14
+    valign: 'center'
+
+<ItemLabel>
+    color: 0, 0, 0, .2
+    font_size: 12
+    text_size: self.size
+    valign: 'top'

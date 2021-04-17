@@ -15,6 +15,3 @@ class Categories(Base):
     category_name = Column(String)
     recipe = relationship('Recipe', secondary = recipe_has_categories_table, backref='recipe_categories')
 
-    def __repr__(self):
-        info = f"Категория: [{self.category_name}, {self.id}]"
-        return info
