@@ -51,6 +51,9 @@ class RecipeNamePreviewLabel(Label):
 class ItemLabel(Label):
     pass
 
+class PreviewBoxLayout(BoxLayout):
+    pass
+
 class GoodListGridLayout(GridLayout):
     good_list_1 = []
     good_list_2 = []
@@ -156,71 +159,182 @@ class FindGlobalButton(Button):
 
     def find_recipes(self, grid):
 
-        if 'категория' in self.filters[0]:
-            self.filters[0] = 'категория'
-        if 'кухня' in self.filters[1]:
-            self.filters[1] = 'кухня'
-        if 'меню' in self.filters[2]:
-            self.filters[2] = 'меню'
+        if ('категория' in self.filters[0]) and ('кухня' in self.filters[1]) and ('меню' in self.filters[2]):
+            for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time):
 
-        for _ in session.query(Recipe.name, Time.minutes, Categories.category_name, Cuisine.cuisine_name, Menu.menu_name, Recipe.img_folder_name).join(Time).filter(and_(
-                                                             recipe_has_categories_table.c.recipe_id == Recipe.id,
-                                                             recipe_has_categories_table.c.categories_id == Categories.id,
-                                                             Categories.category_name == self.filters[0])).filter(
-                                                             and_(recipe_has_cuisine_table.c.recipe_id == Recipe.id,
-                                                             recipe_has_cuisine_table.c.cuisine_id == Cuisine.id,
-                                                             Cuisine.cuisine_name == self.filters[1])).filter(
-                                                             and_(recipe_has_menu_table.c.recipe_id == Recipe.id,
-                                                             recipe_has_menu_table.c.menu_id == Menu.id,
-                                                             Menu.menu_name == self.filters[2])):
-            count = session2.query(Ingredients.id).filter(and_(
+                count = session2.query(Ingredients.id).filter(and_(
                     recipe_has_ingredients_table.c.recipe_id == Recipe.id,
                     recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
                     Ingredients.name.in_(self.ingredients))).count()
 
-            result = self.get_dict_list_from_result([_])
+                result = self.get_dict_list_from_result([_])
 
-            if count == len(self.ingredients):
-                for i in range(6):
+                if count == len(self.ingredients):
+                    self.print_preview(result[0], grid)
+
+        elif ('категория' in self.filters[0]) and ('кухня' in self.filters[1]):
+            for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time).filter(
+                and_(recipe_has_menu_table.c.recipe_id == Recipe.id,
+                     recipe_has_menu_table.c.menu_id == Menu.id,
+                     Menu.menu_name == self.filters[2])):
+
+                count = session2.query(Ingredients.id).filter(and_(
+                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
+                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Ingredients.name.in_(self.ingredients))).count()
+
+                result = self.get_dict_list_from_result([_])
+
+                if count == len(self.ingredients):
+                    self.print_preview(result[0], grid)
+
+        elif ('кухня' in self.filters[1]) and ('меню' in self.filters[2]):
+            for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
+                    recipe_has_categories_table.c.recipe_id == Recipe.id,
+                    recipe_has_categories_table.c.categories_id == Categories.id,
+                    Categories.category_name == self.filters[0])):
+
+                count = session2.query(Ingredients.id).filter(and_(
+                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
+                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Ingredients.name.in_(self.ingredients))).count()
+
+                result = self.get_dict_list_from_result([_])
+
+                if count == len(self.ingredients):
+                    self.print_preview(result[0], grid)
+
+        elif ('категория' in self.filters[0]) and ('меню' in self.filters[2]):
+            for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time).filter(
+                and_(recipe_has_cuisine_table.c.recipe_id == Recipe.id,
+                     recipe_has_cuisine_table.c.cuisine_id == Cuisine.id,
+                     Cuisine.cuisine_name == self.filters[1])):
+
+                count = session2.query(Ingredients.id).filter(and_(
+                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
+                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Ingredients.name.in_(self.ingredients))).count()
+
+                result = self.get_dict_list_from_result([_])
+
+                if count == len(self.ingredients):
+                    self.print_preview(result[0], grid)
+
+        elif 'категория' in self.filters[0]:
+            for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time).filter(
+                and_(recipe_has_cuisine_table.c.recipe_id == Recipe.id,
+                     recipe_has_cuisine_table.c.cuisine_id == Cuisine.id,
+                     Cuisine.cuisine_name == self.filters[1])).filter(
+                and_(recipe_has_menu_table.c.recipe_id == Recipe.id,
+                     recipe_has_menu_table.c.menu_id == Menu.id,
+                     Menu.menu_name == self.filters[2])):
+
+                count = session2.query(Ingredients.id).filter(and_(
+                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
+                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Ingredients.name.in_(self.ingredients))).count()
+
+                result = self.get_dict_list_from_result([_])
+
+                if count == len(self.ingredients):
+                    self.print_preview(result[0], grid)
+
+        elif 'кухня' in self.filters[1]:
+            for _ in session.query(Recipe.name, Time.minutes, Categories.category_name, Cuisine.cuisine_name,
+                                   Menu.menu_name, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
+                    recipe_has_categories_table.c.recipe_id == Recipe.id,
+                    recipe_has_categories_table.c.categories_id == Categories.id,
+                    Categories.category_name == self.filters[0])).filter(
+                and_(recipe_has_menu_table.c.recipe_id == Recipe.id,
+                     recipe_has_menu_table.c.menu_id == Menu.id,
+                     Menu.menu_name == self.filters[2])):
+
+                count = session2.query(Ingredients.id).filter(and_(
+                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
+                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Ingredients.name.in_(self.ingredients))).count()
+
+                result = self.get_dict_list_from_result([_])
+
+                if count == len(self.ingredients):
+                    self.print_preview(result[0], grid)
+
+        elif 'меню' in self.filters[2]:
+            for _ in session.query(Recipe.name, Time.minutes, Categories.category_name, Cuisine.cuisine_name,
+                                   Menu.menu_name, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
+                    recipe_has_categories_table.c.recipe_id == Recipe.id,
+                    recipe_has_categories_table.c.categories_id == Categories.id,
+                    Categories.category_name == self.filters[0])).filter(
+                and_(recipe_has_cuisine_table.c.recipe_id == Recipe.id,
+                     recipe_has_cuisine_table.c.cuisine_id == Cuisine.id,
+                     Cuisine.cuisine_name == self.filters[1])):
+
+                count = session2.query(Ingredients.id).filter(and_(
+                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
+                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Ingredients.name.in_(self.ingredients))).count()
+
+                result = self.get_dict_list_from_result([_])
+
+                if count == len(self.ingredients):
+                    self.print_preview(result[0], grid)
+
+        else:
+            for _ in session.query(Recipe.name, Time.minutes, Categories.category_name, Cuisine.cuisine_name, Menu.menu_name, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
+                                                                 recipe_has_categories_table.c.recipe_id == Recipe.id,
+                                                                 recipe_has_categories_table.c.categories_id == Categories.id,
+                                                                 Categories.category_name == self.filters[0])).filter(
+                                                                 and_(recipe_has_cuisine_table.c.recipe_id == Recipe.id,
+                                                                 recipe_has_cuisine_table.c.cuisine_id == Cuisine.id,
+                                                                 Cuisine.cuisine_name == self.filters[1])).filter(
+                                                                 and_(recipe_has_menu_table.c.recipe_id == Recipe.id,
+                                                                 recipe_has_menu_table.c.menu_id == Menu.id,
+                                                                 Menu.menu_name == self.filters[2])):
+
+                count = session2.query(Ingredients.id).filter(and_(
+                        recipe_has_ingredients_table.c.recipe_id == Recipe.id,
+                        recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                        Ingredients.name.in_(self.ingredients))).count()
+
+                result = self.get_dict_list_from_result([_])
+
+                if count == len(self.ingredients):
                     self.print_preview(result[0], grid)
 
 
     def print_preview(self, dict, grid):
-        main = BoxLayout(size_hint=[1, None], padding=[5, 10])
+        main = PreviewBoxLayout(height=350, padding=[10, 10], orientation='vertical')
 
-        img = Image(size_hint=[.8, 1], source=f'img/img_for_recipes/{dict["img_folder_name"]}', center_y=main.center_y)
-        main_box = BoxLayout(size_hint=[1, 1], orientation='vertical')
+        #image
+        img_box = BoxLayout(size_hint=[1, 2], padding=[7, 7])
+        img = Image(source=f'img/img_for_recipes/{dict["img_folder_name"]}', center_x=img_box.center_x)
+        img_box.add_widget(img)
+        main.add_widget(img_box)
+
+        #title
         name = RecipeNamePreviewLabel(text=dict['name'])
-        tegs = BoxLayout(size_hint=[1, 1])
+        main.add_widget(name)
 
-        category_teg = Label(color=(1, .58, .25, 1), font_size=12)
-        if dict['category_name'] != 'категория':
-            category_teg.text = dict['category_name']
+        #items
+        items_box = BoxLayout(size_hint=[1, .3])
 
-        cuisine_teg = Label(color=(1, .58, .25, 1), font_size=12)
-        if dict['cuisine_name'] != 'кухня':
-            cuisine_teg.text = f"{dict['cuisine_name']} кухня"
-
-        menu_teg = Label(color=(1, .58, .25, 1), font_size=12)
-        if dict['menu_name'] != 'меню':
-            menu_teg.text = f"{dict['menu_name']} меню"
-
-        items_box = BoxLayout(size_hint=[1, 1])
-        count_in = ItemLabel(text='5 ингредиентов')
+        time_box = BoxLayout()
+        img_time = Image(source='img/clocks.png', size_hint=[.7, .7], pos_hint={'y': .2})
         time = ItemLabel(text=f'{dict["minutes"]} минут')
+        time_box.add_widget(img_time)
+        time_box.add_widget(time)
 
-        tegs.add_widget(category_teg)
-        tegs.add_widget(cuisine_teg)
-        tegs.add_widget(menu_teg)
+        calories_box = BoxLayout()
+        img_calories = Image(source='img/kcal.png', size_hint=[.6, .6], pos_hint={'y': .2})
+        calories = ItemLabel(text=f'{dict["calories"]} ккал')
+        calories_box.add_widget(img_calories)
+        calories_box.add_widget(calories)
 
-        items_box.add_widget(count_in)
-        items_box.add_widget(time)
-
-        main_box.add_widget(tegs)
-        main_box.add_widget(name)
-        main_box.add_widget(items_box)
-        main.add_widget(img)
-        main.add_widget(main_box)
+        #add all
+        items_box.add_widget(time_box)
+        items_box.add_widget(Image(source='img/line1.png', size_hint=[.1, 1]))
+        items_box.add_widget(calories_box)
+        main.add_widget(items_box)
 
         grid.add_widget(main, 1)
 
