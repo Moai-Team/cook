@@ -10,9 +10,11 @@ recipe_has_ingredients_table = Table('recipe_has_ingredients', Base.metadata,
 
 class Ingredients(Base):
     __tablename__ = 'ingredients'
+    __table_args__ = {'sqlite_autoincrement': True}
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String)
+
     recipe = relationship('Recipe', secondary = recipe_has_ingredients_table, backref='recipe_ingredients')
 
 

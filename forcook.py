@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from models.datebase import DATABASE_NAME, Session
+from models.datebase import DATABASE_NAME, Session, Load_Data
 import create_datebase as db_creator
 from sqlalchemy import and_, or_, func
 from models.ingredients import Ingredients, recipe_has_ingredients_table
@@ -371,8 +371,24 @@ class ForCookApp(App):
 
 if __name__ == '__main__':
     db_is_created = os.path.exists(DATABASE_NAME)
+
     if not db_is_created:
         db_creator.create_db()
+        session3 = Session()
+        file_name = "csv/1ingredients.csv"
+        data = Load_Data(file_name)
+
+        for i in data:
+            print(i)
+            record = Ingredients(**{
+                'id': i[0],
+                'name': i[1]
+            })
+
+            session3.add(record)
+
+        session3.commit()
+
     session = Session()
     session2 = Session()
 
