@@ -3,10 +3,13 @@ from models.datebase import Base
 from sqlalchemy.orm import relationship
 
 
-recipe_has_ingredients_table = Table('recipe_has_ingredients', Base.metadata,
-                                     Column('recipe_id', Integer, ForeignKey('recipe.id')),
-                                     Column('ingredients_id', Integer, ForeignKey('ingredients.id'))
-                                     )
+class Recipe_has_ingredients(Base):
+    __tablename__ = 'recipe_has_ingredients'
+    recipe_id = Column(Integer, ForeignKey('recipe.id'), primary_key=True)
+    ingredients_id = Column(Integer, ForeignKey('ingredients.id'), primary_key=True)
+    child = relationship("Ingredients")
+    parent = relationship("Recipe")
+
 
 class Ingredients(Base):
     __tablename__ = 'ingredients'
@@ -15,7 +18,7 @@ class Ingredients(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String)
 
-    recipe = relationship('Recipe', secondary = recipe_has_ingredients_table, backref='recipe_ingredients')
+    recipe = relationship('Recipe_has_ingredients')
 
 
 

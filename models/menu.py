@@ -1,16 +1,18 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Table
+from sqlalchemy import Column, Integer, String, ForeignKey
 from models.datebase import Base
 from sqlalchemy.orm import relationship
 
 
-recipe_has_menu_table = Table('recipe_has_menu', Base.metadata,
-                                     Column('recipe_id', Integer, ForeignKey('recipe.id')),
-                                     Column('menu_id', Integer, ForeignKey('menu.id'))
-                                     )
+class Recipe_has_menu(Base):
+    __tablename__ = 'recipe_has_menu'
+    recipe_id = Column(Integer, ForeignKey('recipe.id'), primary_key=True)
+    menu_id = Column(Integer, ForeignKey('menu.id'), primary_key=True)
+    child = relationship("Menu")
+    parent = relationship("Recipe")
 
 class Menu(Base):
     __tablename__ = 'menu'
 
     id = Column(Integer, primary_key=True)
     menu_name = Column(String)
-    recipe = relationship('Recipe', secondary = recipe_has_menu_table, backref='menu_categories')
+    recipe = relationship('Recipe_has_menu')

@@ -1,14 +1,13 @@
-import sqlite3
 import os
-from models.datebase import DATABASE_NAME, Session, Load_Data
+from models.datebase import DATABASE_NAME, Session, Load_Data_1, Load_Data_2, Load_Data_3
 import create_datebase as db_creator
-from sqlalchemy import and_, or_, func
-from models.ingredients import Ingredients, recipe_has_ingredients_table
+from sqlalchemy import and_
+from models.ingredients import Ingredients, Recipe_has_ingredients
 from models.recipe import Recipe
 from models.time import Time
-from models.categories import Categories, recipe_has_categories_table
-from  models.menu import Menu, recipe_has_menu_table
-from  models.cuisine import Cuisine, recipe_has_cuisine_table
+from models.categories import Categories, Recipe_has_categories
+from  models.menu import Menu, Recipe_has_menu
+from  models.cuisine import Cuisine, Recipe_has_cuisine
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -163,8 +162,8 @@ class FindGlobalButton(Button):
             for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time):
 
                 count = session2.query(Ingredients.id).filter(and_(
-                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
-                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Recipe_has_ingredients.recipe_id == Recipe.id,
+                    Recipe_has_ingredients.ingredients_id == Ingredients.id,
                     Ingredients.name.in_(self.ingredients))).count()
 
                 result = self.get_dict_list_from_result([_])
@@ -174,13 +173,13 @@ class FindGlobalButton(Button):
 
         elif ('категория' in self.filters[0]) and ('кухня' in self.filters[1]):
             for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time).filter(
-                and_(recipe_has_menu_table.c.recipe_id == Recipe.id,
-                     recipe_has_menu_table.c.menu_id == Menu.id,
+                and_(Recipe_has_menu.recipe_id == Recipe.id,
+                     Recipe_has_menu.menu_id == Menu.id,
                      Menu.menu_name == self.filters[2])):
 
                 count = session2.query(Ingredients.id).filter(and_(
-                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
-                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Recipe_has_ingredients.recipe_id == Recipe.id,
+                    Recipe_has_ingredients.ingredients_id == Ingredients.id,
                     Ingredients.name.in_(self.ingredients))).count()
 
                 result = self.get_dict_list_from_result([_])
@@ -190,13 +189,13 @@ class FindGlobalButton(Button):
 
         elif ('кухня' in self.filters[1]) and ('меню' in self.filters[2]):
             for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
-                    recipe_has_categories_table.c.recipe_id == Recipe.id,
-                    recipe_has_categories_table.c.categories_id == Categories.id,
+                    Recipe_has_categories.recipe_id == Recipe.id,
+                    Recipe_has_categories.categories_id == Categories.id,
                     Categories.category_name == self.filters[0])):
 
                 count = session2.query(Ingredients.id).filter(and_(
-                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
-                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Recipe_has_ingredients.recipe_id == Recipe.id,
+                    Recipe_has_ingredients.ingredients_id == Ingredients.id,
                     Ingredients.name.in_(self.ingredients))).count()
 
                 result = self.get_dict_list_from_result([_])
@@ -206,13 +205,13 @@ class FindGlobalButton(Button):
 
         elif ('категория' in self.filters[0]) and ('меню' in self.filters[2]):
             for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time).filter(
-                and_(recipe_has_cuisine_table.c.recipe_id == Recipe.id,
-                     recipe_has_cuisine_table.c.cuisine_id == Cuisine.id,
+                and_(Recipe_has_cuisine.recipe_id == Recipe.id,
+                     Recipe_has_cuisine.cuisine_id == Cuisine.id,
                      Cuisine.cuisine_name == self.filters[1])):
 
                 count = session2.query(Ingredients.id).filter(and_(
-                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
-                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Recipe_has_ingredients.recipe_id == Recipe.id,
+                    Recipe_has_ingredients.ingredients_id == Ingredients.id,
                     Ingredients.name.in_(self.ingredients))).count()
 
                 result = self.get_dict_list_from_result([_])
@@ -222,16 +221,16 @@ class FindGlobalButton(Button):
 
         elif 'категория' in self.filters[0]:
             for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time).filter(
-                and_(recipe_has_cuisine_table.c.recipe_id == Recipe.id,
-                     recipe_has_cuisine_table.c.cuisine_id == Cuisine.id,
+                and_(Recipe_has_cuisine.recipe_id == Recipe.id,
+                     Recipe_has_cuisine.cuisine_id == Cuisine.id,
                      Cuisine.cuisine_name == self.filters[1])).filter(
-                and_(recipe_has_menu_table.c.recipe_id == Recipe.id,
-                     recipe_has_menu_table.c.menu_id == Menu.id,
+                and_(Recipe_has_menu.recipe_id == Recipe.id,
+                     Recipe_has_menu.menu_id == Menu.id,
                      Menu.menu_name == self.filters[2])):
 
                 count = session2.query(Ingredients.id).filter(and_(
-                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
-                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Recipe_has_ingredients.recipe_id == Recipe.id,
+                    Recipe_has_ingredients.ingredients_id == Ingredients.id,
                     Ingredients.name.in_(self.ingredients))).count()
 
                 result = self.get_dict_list_from_result([_])
@@ -242,16 +241,16 @@ class FindGlobalButton(Button):
         elif 'кухня' in self.filters[1]:
             for _ in session.query(Recipe.name, Time.minutes, Categories.category_name, Cuisine.cuisine_name,
                                    Menu.menu_name, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
-                    recipe_has_categories_table.c.recipe_id == Recipe.id,
-                    recipe_has_categories_table.c.categories_id == Categories.id,
+                    Recipe_has_categories.recipe_id == Recipe.id,
+                    Recipe_has_categories.categories_id == Categories.id,
                     Categories.category_name == self.filters[0])).filter(
-                and_(recipe_has_menu_table.c.recipe_id == Recipe.id,
-                     recipe_has_menu_table.c.menu_id == Menu.id,
+                and_(Recipe_has_menu.recipe_id == Recipe.id,
+                     Recipe_has_menu.menu_id == Menu.id,
                      Menu.menu_name == self.filters[2])):
 
                 count = session2.query(Ingredients.id).filter(and_(
-                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
-                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Recipe_has_ingredients.recipe_id == Recipe.id,
+                    Recipe_has_ingredients.ingredients_id == Ingredients.id,
                     Ingredients.name.in_(self.ingredients))).count()
 
                 result = self.get_dict_list_from_result([_])
@@ -262,16 +261,16 @@ class FindGlobalButton(Button):
         elif 'меню' in self.filters[2]:
             for _ in session.query(Recipe.name, Time.minutes, Categories.category_name, Cuisine.cuisine_name,
                                    Menu.menu_name, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
-                    recipe_has_categories_table.c.recipe_id == Recipe.id,
-                    recipe_has_categories_table.c.categories_id == Categories.id,
+                    Recipe_has_categories.recipe_id == Recipe.id,
+                    Recipe_has_categories.categories_id == Categories.id,
                     Categories.category_name == self.filters[0])).filter(
-                and_(recipe_has_cuisine_table.c.recipe_id == Recipe.id,
-                     recipe_has_cuisine_table.c.cuisine_id == Cuisine.id,
+                and_(Recipe_has_cuisine.recipe_id == Recipe.id,
+                     Recipe_has_cuisine.cuisine_id == Cuisine.id,
                      Cuisine.cuisine_name == self.filters[1])):
 
                 count = session2.query(Ingredients.id).filter(and_(
-                    recipe_has_ingredients_table.c.recipe_id == Recipe.id,
-                    recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                    Recipe_has_ingredients.recipe_id == Recipe.id,
+                    Recipe_has_ingredients.ingredients_id == Ingredients.id,
                     Ingredients.name.in_(self.ingredients))).count()
 
                 result = self.get_dict_list_from_result([_])
@@ -281,19 +280,19 @@ class FindGlobalButton(Button):
 
         else:
             for _ in session.query(Recipe.name, Time.minutes, Categories.category_name, Cuisine.cuisine_name, Menu.menu_name, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
-                                                                 recipe_has_categories_table.c.recipe_id == Recipe.id,
-                                                                 recipe_has_categories_table.c.categories_id == Categories.id,
+                                                                 Recipe_has_categories.recipe_id == Recipe.id,
+                                                                 Recipe_has_categories.categories_id == Categories.id,
                                                                  Categories.category_name == self.filters[0])).filter(
-                                                                 and_(recipe_has_cuisine_table.c.recipe_id == Recipe.id,
-                                                                 recipe_has_cuisine_table.c.cuisine_id == Cuisine.id,
+                                                                 and_(Recipe_has_cuisine.recipe_id == Recipe.id,
+                                                                 Recipe_has_cuisine.cuisine_id == Cuisine.id,
                                                                  Cuisine.cuisine_name == self.filters[1])).filter(
-                                                                 and_(recipe_has_menu_table.c.recipe_id == Recipe.id,
-                                                                 recipe_has_menu_table.c.menu_id == Menu.id,
+                                                                 and_(Recipe_has_menu.recipe_id == Recipe.id,
+                                                                 Recipe_has_menu.menu_id == Menu.id,
                                                                  Menu.menu_name == self.filters[2])):
 
                 count = session2.query(Ingredients.id).filter(and_(
-                        recipe_has_ingredients_table.c.recipe_id == Recipe.id,
-                        recipe_has_ingredients_table.c.ingredients_id == Ingredients.id,
+                        Recipe_has_ingredients.recipe_id == Recipe.id,
+                        Recipe_has_ingredients.ingredients_id == Ingredients.id,
                         Ingredients.name.in_(self.ingredients))).count()
 
                 result = self.get_dict_list_from_result([_])
@@ -375,16 +374,92 @@ if __name__ == '__main__':
     if not db_is_created:
         db_creator.create_db()
         session3 = Session()
-        file_name = "csv/1ingredients.csv"
-        data = Load_Data(file_name)
 
-        for i in data:
-            print(i)
+        data1 = Load_Data_1("csv/1ingredients.csv")
+        for i in data1:
             record = Ingredients(**{
                 'id': i[0],
                 'name': i[1]
             })
+            session3.add(record)
 
+        data2 = Load_Data_2("csv/1recipes.csv")
+        for i in data2:
+            record = Recipe(**{
+                'id': i[0],
+                'name': i[1],
+                'img_folder_name': i[2],
+                'calories': i[3],
+                'instruction': i[4],
+                'time_id': i[5],
+                'history': i[6],
+                'advice': i[7]
+            })
+
+            session3.add(record)
+
+        data3 = Load_Data_3("csv/1time.csv")
+        for i in data3:
+            record = Time(**{
+                'id': i[0],
+                'minutes': i[1]
+            })
+            session3.add(record)
+
+        data4 = Load_Data_1("csv/1categories.csv")
+        for i in data4:
+            record = Categories(**{
+                'id': i[0],
+                'category_name': i[1]
+            })
+            session3.add(record)
+
+        data5 = Load_Data_1("csv/1cuisine.csv")
+        for i in data5:
+            record = Cuisine(**{
+                'id': i[0],
+                'cuisine_name': i[1]
+            })
+            session3.add(record)
+
+        data6 = Load_Data_1("csv/1menu.csv")
+        for i in data6:
+            record = Menu(**{
+                'id': i[0],
+                'menu_name': i[1]
+            })
+            session3.add(record)
+
+        data7 = Load_Data_3("csv/1recipe_has_ingredients.csv")
+        for i in data7:
+            record = Recipe_has_ingredients(**{
+                'recipe_id': i[0],
+                'ingredients_id': i[1]
+            })
+            session3.add(record)
+
+        data8 = Load_Data_3("csv/1recipe_has_categories.csv")
+        for i in data8:
+            record = Recipe_has_categories(**{
+                'recipe_id': i[0],
+                'categories_id': i[1]
+            })
+            session3.add(record)
+
+        data9 = Load_Data_3("csv/1recipe_has_cuisine.csv")
+        for i in data9:
+            record = Recipe_has_cuisine(**{
+                'recipe_id': i[0],
+                'cuisine_id': i[1]
+            })
+            session3.add(record)
+
+        data10 = Load_Data_3("csv/1recipe_has_menu.csv")
+        for i in data10:
+            record = Recipe_has_menu(**{
+                'recipe_id': i[0],
+                'menu_id': i[1]
+            })
             session3.add(record)
 
         session3.commit()

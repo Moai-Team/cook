@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from models.datebase import Base
+from sqlalchemy.orm import relationship
+
 
 class Recipe(Base):
     __tablename__ = "recipe"
@@ -13,7 +15,13 @@ class Recipe(Base):
     history = Column(String)
     advice = Column(String)
 
-    def __init__(self, name, img_folder_name, calories, instruction, time_id, history, advice):
+    ingredients = relationship('Recipe_has_ingredients')
+    categories = relationship('Recipe_has_categories')
+    cuisine = relationship('Recipe_has_cuisine')
+    menu = relationship('Recipe_has_menu')
+
+    def __init__(self, id, name, img_folder_name, calories, instruction, time_id, history, advice):
+        self.id = id
         self.name = name
         self.img_folder_name = img_folder_name
         self.calories = calories

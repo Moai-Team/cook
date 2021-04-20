@@ -3,15 +3,17 @@ from models.datebase import Base
 from sqlalchemy.orm import relationship
 
 
-recipe_has_categories_table = Table('recipe_has_categories', Base.metadata,
-                                     Column('recipe_id', Integer, ForeignKey('recipe.id')),
-                                     Column('categories_id', Integer, ForeignKey('categories.id'))
-                                     )
+class Recipe_has_categories(Base):
+    __tablename__ = 'recipe_has_categories'
+    recipe_id = Column(Integer, ForeignKey('recipe.id'), primary_key=True)
+    categories_id = Column(Integer, ForeignKey('categories.id'), primary_key=True)
+    child = relationship("Categories")
+    parent = relationship("Recipe")
 
 class Categories(Base):
     __tablename__ = 'categories'
 
     id = Column(Integer, primary_key=True)
     category_name = Column(String)
-    recipe = relationship('Recipe', secondary = recipe_has_categories_table, backref='recipe_categories')
+    recipe = relationship('Recipe_has_categories')
 
