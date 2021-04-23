@@ -558,7 +558,8 @@
                                 self.only_this_setting = self.parent.children[-3].children[-1].active
                                 self.parent.parent.parent.transition.direction = 'left'
                                 self.parent.parent.parent.current = 'preview_recipes'
-                                self.find_recipes(self.parent.parent.parent.children[0].children[-1].children[0].children[0])
+                                self.parent.parent.parent.children[0].children[-1].children[0].children[0].delete_when_back()
+                                self.find_recipes(self.parent.parent.parent.children[0].children[-1].children[0].children[0], self.parent.parent.parent)
 
                             Image:
                                 source: 'img/loupe.png'
@@ -599,7 +600,7 @@
                                     size: self.size
                                     pos: self.pos
 
-                            BoxLayout:
+                            PreviewScreenBoxLayout:
                                 orientation: 'vertical'
                                 size_hint: 1, None
                                 height: sum(x.height for x in self.children)
@@ -611,6 +612,39 @@
                                         Rectangle:
                                             size: self.size
                                             pos: self.pos
+
+                Screen:
+                    name: 'recipe'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        BoxLayout:
+                            size_hint: 1, .1
+                            Label:
+                                text: 'Результаты поиска'
+                                color: 1, 0.58, 0.25, 1
+                                size_hint: 1, 1
+                                text_size: self.size
+                                font_size: 20
+                                padding: [20, 10]
+                            Button:
+                                size_hint: .4, 1
+                                background_down: ''
+                                background_normal: ''
+                                on_release:
+                                    self.parent.parent.parent.parent.transition.direction = 'left'
+                                    self.parent.parent.parent.parent.current = 'preview_recipes'
+                                Image:
+                                    source: 'img/back_button.png'
+                                    center_x: self.parent.center_x
+                                    center_y: self.parent.center_y-10
+                                    size: 30, 20
+                        ScrollView:
+                            canvas.before:
+                                Color:
+                                    rgba: 0, 0, 0, .1
+                                Rectangle:
+                                    size: self.size
+                                    pos: self.pos
 
 
     #-----------------------------Forth Screen---------------------------------------
