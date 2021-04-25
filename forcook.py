@@ -19,8 +19,13 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.popup import Popup
 from kivy.uix.image import Image
 
-from time import sleep
 
+def get_dict_list_from_result(result):
+    list_dict = []
+    for i in result:
+        i_dict = i._asdict()
+        list_dict.append(i_dict)
+    return list_dict
 
 class MainStructure(FloatLayout):
     pass
@@ -47,8 +52,44 @@ class FindIngredientsGlobalButton(Button):
     pass
 
 class PreviewButtons(ButtonBehavior):
+    manager = None
+    recipe_info = {}
+    active = True
+
     def on_release(self):
-        print("1")
+        self.manager.transition.direction = 'left'
+        self.manager.current = 'recipe'
+        self.find_all_information()
+        self.create_recipe()
+
+
+    def find_all_information(self):
+        for _ in session.query(Recipe.name, Recipe.calories, Recipe.img_folder_name, Recipe.history, Recipe.advice, Recipe.instruction, Cuisine.cuisine_name, Menu.menu_name, Categories.category_name).filter(and_(Recipe.name == self.recipe_info['name'],
+                                                                          Recipe_has_cuisine.recipe_id == Recipe.id,
+                                                                          Recipe_has_cuisine.cuisine_id == Cuisine.id,
+                                                                          Recipe_has_menu.menu_id == Menu.id,
+                                                                          Recipe_has_menu.recipe_id == Recipe.id,
+                                                                          Recipe_has_categories.categories_id == Categories.id,
+                                                                          Recipe_has_categories.recipe_id == Recipe.id)):
+            result = get_dict_list_from_result([_])
+            self.recipe_info = result[0]
+
+    def create_recipe(self):
+        content = self.manager.children[0].children[-1].children[0].children[0]
+
+        content.children[-1].children[0].source = f'img/img_for_recipes/{self.recipe_info["img_folder_name"]}'
+        content.children[-1].height = 350
+        content.children[-2].text = self.recipe_info['name']
+        content.children[-2].height = 20
+        content.children[-3].text = self.recipe_info['instruction']
+        content.children[-3].text_size = [350, None]
+        content.children[-3].texture_update()
+        content.children[-3].size = content.children[-3].texture_size
+        content.children[-3].texture_update()
+
+        content.height = sum(x.height for x in content.children)
+        print(content.height, content.children[-3].texture_size)
+
 
 class RecipeNamePreviewLabel(PreviewButtons, Label):
     pass
@@ -258,8 +299,7 @@ class FindGlobalButton(Button):
                     find_recipe_number += 1
 
         elif 'кухня' in self.filters[1]:
-            for _ in session.query(Recipe.name, Time.minutes, Categories.category_name, Cuisine.cuisine_name,
-                                   Menu.menu_name, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
+            for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
                     Recipe_has_categories.recipe_id == Recipe.id,
                     Recipe_has_categories.categories_id == Categories.id,
                     Categories.category_name == self.filters[0])).filter(
@@ -280,8 +320,7 @@ class FindGlobalButton(Button):
                     find_recipe_number += 1
 
         elif 'меню' in self.filters[2]:
-            for _ in session.query(Recipe.name, Time.minutes, Categories.category_name, Cuisine.cuisine_name,
-                                   Menu.menu_name, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
+            for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
                     Recipe_has_categories.recipe_id == Recipe.id,
                     Recipe_has_categories.categories_id == Categories.id,
                     Categories.category_name == self.filters[0])).filter(
@@ -302,7 +341,7 @@ class FindGlobalButton(Button):
                     find_recipe_number += 1
 
         else:
-            for _ in session.query(Recipe.name, Time.minutes, Categories.category_name, Cuisine.cuisine_name, Menu.menu_name, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
+            for _ in session.query(Recipe.name, Time.minutes, Recipe.img_folder_name, Recipe.calories).join(Time).filter(and_(
                                                                  Recipe_has_categories.recipe_id == Recipe.id,
                                                                  Recipe_has_categories.categories_id == Categories.id,
                                                                  Categories.category_name == self.filters[0])).filter(
@@ -335,12 +374,16 @@ class FindGlobalButton(Button):
         #image
         img_box = BoxLayout(size_hint=[1, 2], padding=[7, 7])
         img = PreviewImage(source=f'img/img_for_recipes/{dict["img_folder_name"]}', center_x=img_box.center_x)
+        img.manager = screen
+        img.recipe_info = dict
 
         img_box.add_widget(img)
         main.add_widget(img_box)
 
         #title
         name = RecipeNamePreviewLabel(text=dict['name'])
+        name.manager = screen
+        name.recipe_info = dict
         main.add_widget(name)
 
         #items
