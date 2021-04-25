@@ -6,10 +6,10 @@ from models.ingredients import Ingredients, Recipe_has_ingredients
 from models.recipe import Recipe
 from models.time import Time
 from models.categories import Categories, Recipe_has_categories
-from  models.menu import Menu, Recipe_has_menu
-from  models.cuisine import Cuisine, Recipe_has_cuisine
+from models.menu import Menu, Recipe_has_menu
+from models.cuisine import Cuisine, Recipe_has_cuisine
 
-from kivy.app import App
+from kivy.app import App, Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button, ButtonBehavior
@@ -18,38 +18,49 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.popup import Popup
 from kivy.uix.image import Image
+from kivy.core.window import Window
+from kivy.uix.image import AsyncImage
 
 
 def get_dict_list_from_result(result):
     list_dict = []
-    for i in result:
-        i_dict = i._asdict()
-        list_dict.append(i_dict)
+    for j in result:
+        j_dict = j._asdict()
+        list_dict.append(j_dict)
     return list_dict
+
 
 class MainStructure(FloatLayout):
     pass
 
+
 class TestLabel(Label):
     pass
+
 
 class DeleteGoodButton(Button):
     pass
 
+
 class GoodGridLayout(GridLayout):
     pass
+
 
 class GoodGlobalGridLayout(GridLayout):
     pass
 
+
 class EmptyLabel(Label):
     pass
+
 
 class FindIngredientsButton(Button):
     pass
 
+
 class FindIngredientsGlobalButton(Button):
     pass
+
 
 class PreviewButtons(ButtonBehavior):
     manager = None
@@ -62,9 +73,9 @@ class PreviewButtons(ButtonBehavior):
         self.find_all_information()
         self.create_recipe()
 
-
     def find_all_information(self):
-        for _ in session.query(Recipe.name, Recipe.calories, Recipe.img_folder_name, Recipe.history, Recipe.advice, Recipe.instruction, Cuisine.cuisine_name, Menu.menu_name, Categories.category_name).filter(and_(Recipe.name == self.recipe_info['name'],
+        for _ in session.query(Recipe.name, Recipe.calories, Recipe.img_folder_name, Recipe.history, Recipe.advice,
+                               Recipe.instruction, Cuisine.cuisine_name, Menu.menu_name, Categories.category_name).filter(and_(Recipe.name == self.recipe_info['name'],
                                                                           Recipe_has_cuisine.recipe_id == Recipe.id,
                                                                           Recipe_has_cuisine.cuisine_id == Cuisine.id,
                                                                           Recipe_has_menu.menu_id == Menu.id,
@@ -77,31 +88,52 @@ class PreviewButtons(ButtonBehavior):
     def create_recipe(self):
         content = self.manager.children[0].children[-1].children[0].children[0]
 
-        content.children[-1].children[0].source = f'img/img_for_recipes/{self.recipe_info["img_folder_name"]}'
-        content.children[-1].height = 350
+        content.children[-1].height = 300
+        content.children[-1].children[0].clear_widgets()
+        content.children[-1].children[0].add_widget(AsyncImage(source=f'img/img_for_recipes/{self.recipe_info["img_folder_name"]}'))
+        content.children[-1].children[0].add_widget(AsyncImage(source=f'img/img_for_recipes/1_{self.recipe_info["img_folder_name"]}'))
+        content.children[-1].children[0].add_widget(AsyncImage(source=f'img/img_for_recipes/2_{self.recipe_info["img_folder_name"]}'))
+
         content.children[-2].text = self.recipe_info['name']
-        content.children[-2].height = 20
-        content.children[-3].text = self.recipe_info['instruction']
-        content.children[-3].text_size = [350, None]
-        content.children[-3].texture_update()
-        content.children[-3].size = content.children[-3].texture_size
-        content.children[-3].texture_update()
+
+        content.children[-4].text = self.recipe_info['history']
+        content.children[-4].text_size = [Window.width, None]
+        content.children[-4].texture_update()
+        content.children[-4].size = content.children[-4].texture_size
+        content.children[-4].texture_update()
+
+        text_instr = 'Инструкция к приготовлению:\n\n' + self.recipe_info['instruction']
+        text_instr = text_instr.replace(r'<\n>', '\n')
+        content.children[-6].text = text_instr
+        content.children[-6].text_size = [Window.width, None]
+        content.children[-6].texture_update()
+        content.children[-6].size = content.children[-6].texture_size
+        content.children[-6].texture_update()
+
+        content.children[-8].text = self.recipe_info['advice']
+        content.children[-8].text_size = [Window.width, None]
+        content.children[-8].texture_update()
+        content.children[-8].size = content.children[-8].texture_size
+        content.children[-8].texture_update()
 
         content.height = sum(x.height for x in content.children)
-        print(content.height, content.children[-3].texture_size)
 
 
 class RecipeNamePreviewLabel(PreviewButtons, Label):
     pass
 
+
 class ItemLabel(Label):
     pass
+
 
 class PreviewBoxLayout(BoxLayout):
     pass
 
+
 class PreviewImage(PreviewButtons, Image):
     pass
+
 
 class GoodListGridLayout(GridLayout):
     good_list_1 = []
@@ -124,7 +156,7 @@ class GoodListGridLayout(GridLayout):
         print(self.good_list_1)
 
     def add_good_global(self, text):
-        if (text in self.good_list_2):
+        if text in self.good_list_2:
             return
         gl = GoodGlobalGridLayout(padding=[10, 10])
         tl = TestLabel(text=text, padding=[30, 0], color=(0, 0, 0, 1))
@@ -142,6 +174,7 @@ class GoodListGridLayout(GridLayout):
             self.remove_widget(self.children[1])
         self.good_list_2.clear()
 
+
 class GoodTextInput(TextInput):
     def find_ingredients(self, name):
         result = []
@@ -157,7 +190,7 @@ class GoodTextInput(TextInput):
             label.add_widget(Label(text="Ингредиент не найден", color=(0, 0, 0, 1), size_hint=(1, None), font_size=14))
             return
         for i in ingredients_list:
-            label.add_widget(FindIngredientsButton(text = i['name']))
+            label.add_widget(FindIngredientsButton(text=i['name']))
 
     def print_find_ingredients_global(self, label):
         ingredients_list = self.find_ingredients(self.text.lower())
@@ -166,7 +199,8 @@ class GoodTextInput(TextInput):
             label.add_widget(Label(text="Ингредиент не найден", color=(0, 0, 0, 1), size_hint=(1, None), font_size=14))
             return
         for i in ingredients_list:
-            label.add_widget(FindIngredientsGlobalButton(text = i['name']))
+            label.add_widget(FindIngredientsGlobalButton(text=i['name']))
+
 
     def get_dict_list_from_result(self, result):
         list_dict = []
@@ -174,6 +208,7 @@ class GoodTextInput(TextInput):
             i_dict = i._asdict()
             list_dict.append(i_dict)
         return list_dict
+
 
 class GoodPopup(Popup):
     ref = ""
@@ -188,6 +223,7 @@ class GoodPopup(Popup):
     def good_list_id(self, name):
         self.good_list_name += [name]
 
+
 class FindPopup(Popup):
     ref = ""
     good_list_name = [object()]
@@ -200,6 +236,7 @@ class FindPopup(Popup):
 
     def good_list_id(self, name):
         self.good_list_name += [name]
+
 
 class FindGlobalButton(Button):
     filters = [None, None, None]
@@ -237,7 +274,7 @@ class FindGlobalButton(Button):
                     Ingredients.name.in_(self.ingredients),
                     Recipe.name == result[0]['name'])).count()
 
-                if count == len(self.ingredients) and self.only_this_setting == False:
+                if count == len(self.ingredients) and self.only_this_setting is False:
                     self.print_preview(result[0], grid, screen)
                     find_recipe_number += 1
 
@@ -255,7 +292,7 @@ class FindGlobalButton(Button):
                     Ingredients.name.in_(self.ingredients),
                     Recipe.name == result[0]['name'])).count()
 
-                if count == len(self.ingredients) and self.only_this_setting == False:
+                if count == len(self.ingredients) and self.only_this_setting is False:
                     self.print_preview(result[0], grid, screen)
                     find_recipe_number += 1
 
@@ -273,7 +310,7 @@ class FindGlobalButton(Button):
                     Ingredients.name.in_(self.ingredients),
                     Recipe.name == result[0]['name'])).count()
 
-                if count == len(self.ingredients) and self.only_this_setting == False:
+                if count == len(self.ingredients) and self.only_this_setting is False:
                     self.print_preview(result[0], grid, screen)
                     find_recipe_number += 1
 
@@ -294,7 +331,7 @@ class FindGlobalButton(Button):
                     Ingredients.name.in_(self.ingredients),
                     Recipe.name == result[0]['name'])).count()
 
-                if count == len(self.ingredients) and self.only_this_setting == False:
+                if count == len(self.ingredients) and self.only_this_setting is False:
                     self.print_preview(result[0], grid, screen)
                     find_recipe_number += 1
 
@@ -315,7 +352,7 @@ class FindGlobalButton(Button):
                     Ingredients.name.in_(self.ingredients),
                     Recipe.name == result[0]['name'])).count()
 
-                if count == len(self.ingredients) and self.only_this_setting == False:
+                if count == len(self.ingredients) and self.only_this_setting is False:
                     self.print_preview(result[0], grid, screen)
                     find_recipe_number += 1
 
@@ -336,7 +373,7 @@ class FindGlobalButton(Button):
                     Ingredients.name.in_(self.ingredients),
                     Recipe.name == result[0]['name'])).count()
 
-                if count == len(self.ingredients) and self.only_this_setting == False:
+                if count == len(self.ingredients) and self.only_this_setting is False:
                     self.print_preview(result[0], grid, screen)
                     find_recipe_number += 1
 
@@ -360,18 +397,17 @@ class FindGlobalButton(Button):
                     Ingredients.name.in_(self.ingredients),
                     Recipe.name == result[0]['name'])).count()
 
-                if count == len(self.ingredients) and self.only_this_setting == False:
+                if count == len(self.ingredients) and self.only_this_setting is False:
                     self.print_preview(result[0], grid, screen)
                     find_recipe_number += 1
 
         if find_recipe_number == 0:
             self.add_empty_label(grid)
 
-
     def print_preview(self, dict, grid, screen):
         main = PreviewBoxLayout(height=350, padding=[10, 10], orientation='vertical')
 
-        #image
+        # image
         img_box = BoxLayout(size_hint=[1, 2], padding=[7, 7])
         img = PreviewImage(source=f'img/img_for_recipes/{dict["img_folder_name"]}', center_x=img_box.center_x)
         img.manager = screen
@@ -380,13 +416,13 @@ class FindGlobalButton(Button):
         img_box.add_widget(img)
         main.add_widget(img_box)
 
-        #title
+        # title
         name = RecipeNamePreviewLabel(text=dict['name'])
         name.manager = screen
         name.recipe_info = dict
         main.add_widget(name)
 
-        #items
+        # items
         items_box = BoxLayout(size_hint=[1, .3])
 
         time_box = BoxLayout()
@@ -401,7 +437,7 @@ class FindGlobalButton(Button):
         calories_box.add_widget(img_calories)
         calories_box.add_widget(calories)
 
-        #add all
+        # add all
         items_box.add_widget(time_box)
         items_box.add_widget(Image(source='img/line1.png', size_hint=[.1, 1]))
         items_box.add_widget(calories_box)
@@ -425,6 +461,7 @@ class FindGlobalButton(Button):
             list_dict.append(i_dict)
         return list_dict
 
+
 class PreviewScreenBoxLayout(BoxLayout):
     def delete_when_back(self):
         if type(self.children[-1]) != Label:
@@ -434,6 +471,7 @@ class PreviewScreenBoxLayout(BoxLayout):
 
 class DeleteFavButton(Button):
     pass
+
 
 class FavoritListGridLayout(GridLayout):
     def __init__(self, **args):
@@ -448,9 +486,11 @@ class FavoritListGridLayout(GridLayout):
         #через бд
 # это написал кто-то слишком умный
 
+
 class ForCookApp(App):
     def build(self):
         return MainStructure()
+
 
 if __name__ == '__main__':
     db_is_created = os.path.exists(DATABASE_NAME)

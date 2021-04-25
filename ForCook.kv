@@ -476,7 +476,7 @@
                                 text: 'Категория'
                                 font_size: 14
                                 color: 1, .58, .25, 1
-                                values: 'Любая категория', 'Завтраки', 'Обеды', 'Закуски', 'Напитки', 'Закуски', 'Десерты'
+                                values: 'Любая категория', 'Заготовки', 'Десерты', 'Основные блюда', 'Завтраки', 'Салаты', 'Супы', 'Пицца', "Закуски", "Сэндвичи", "Ризотто", "Напитки", "Соусы", "Маринады", "Роллы и суши"
                                 size: 100, 44
                                 option_cls: 'FiltersSpinnerOption'
                                 background_normal: 'img/button_background1.png'
@@ -654,23 +654,72 @@
                                         pos: self.x+10, self.y+10
                                 orientation: 'vertical'
                                 size_hint: 1, None
-                                #height: sum(x.height for x in self.children)
                                 padding: [10, 10]
                                 BoxLayout:
-                                    padding: [5, 5]
-                                    Image:
-                                        source: ''
-                                        center_x: self.parent.center_x
-                                        center_y: self.parent.center_y-10
+                                    padding: 5, 5
+                                    Carousel:
+                                        direction: 'right'
+                                        scroll_timeout: 300
+                                        ignore_perpendicular_swipes: True
+                                        loop: True
+                                        scroll_distance: 10
                                 Label:
                                     text: ''
                                     color: 0, 0, 0, 1
+                                    size_hint: 1, None
+                                    font_size: 18
+                                    height: 40
+                                    text_size: self.size
+                                    valign: 'center'
+                                    padding: 10, 0
+                                Label:
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0, 0, 0, .2
+                                        Rectangle:
+                                            size: self.width-10, self.height
+                                            pos: self.x+5, self.y
+                                    size_hint_y: None
+                                    height: 2
                                 Label:
                                     size_hint: 1, None
                                     text: ''
                                     color: 0, 0, 0, 1
-                                    #text_size: self.width, None
-                                    #height: self.texture_size[1]
+                                    padding: 20, 10
+                                    multiline: True
+                                    font_size: 14
+                                Label:
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0, 0, 0, .2
+                                        Rectangle:
+                                            size: self.width-10, self.height
+                                            pos: self.x+5, self.y
+                                    size_hint_y: None
+                                    height: 2
+                                Label:
+                                    size_hint: 1, None
+                                    text: ''
+                                    color: 0, 0, 0, 1
+                                    padding: 20, 10
+                                    multiline: True
+                                    font_size: 14
+                                Label:
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0, 0, 0, .2
+                                        Rectangle:
+                                            size: self.width-10, self.height
+                                            pos: self.x+5, self.y
+                                    size_hint_y: None
+                                    height: 2
+                                Label:
+                                    size_hint: 1, None
+                                    text: ''
+                                    color: 0, 0, 0, 1
+                                    padding: 20, 10
+                                    multiline: True
+                                    font_size: 14
                                 Label:
                                     size_hint: 1, None
 
