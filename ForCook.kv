@@ -38,18 +38,25 @@
                         on_release:
                             Factory.GoodPopup().open()
                             Factory.GoodPopup().good_list_id(self.parent.parent.child_2.child_1)
+                TestLabel:
+                    text: 'Список продуктов:'
+                    font_size: 16
+                    height: 50
+                    padding: [20, 10]
                 ScrollView:
                     id: scroll_view
                     child_1: good_list
+                    canvas:
+                        Color:
+                            rgba: 0, 0, 0, .1
+                        Rectangle:
+                            size: self.width-10, self.height
+                            pos: self.x+5, self.y
                     GoodListGridLayout:
                         id: good_list
                         cols: 1
                         size_hint: 1,None
                         height: self.minimum_height
-                        TestLabel:
-                            text: 'Список продуктов:'
-                            font_size: 16
-                            padding: [20, 10]
                         EmptyLabel:
                             id: empty
                         Button:
@@ -69,388 +76,278 @@
 
         Screen:
             name: 'book'
-            BoxLayout:
-                orientation: 'vertical'
-                TitleLabel:
-                    text: 'Рецепты'
-                ScreenManager:
-                    id: category_manager
-                    Screen:
-                        name: 'category_menu'
+            BookScreenManager:
+                id: category_manager
+                Screen:
+                    name: 'category_menu'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        TitleLabel:
+                            text: 'Рецепты'
                         ScrollView:
+                            canvas:
+                                Color:
+                                    rgba: 0, 0, 0, .1
+                                Rectangle:
+                                    size: self.size
+                                    pos: self.pos
                             GridLayout:
                                 cols: 1
                                 size_hint: 1,None
                                 height: self.minimum_height
+                                spacing: 1
                                 CategoryNameButton:
                                     text: 'Заготовки'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'blanks'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 CategoryNameButton:
                                     text: 'Выпечка и десерты'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'desserts'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 CategoryNameButton:
                                     text: 'Главные блюда'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'main_dishes'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 CategoryNameButton:
                                     text: 'Завтраки'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'breakfasts'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 CategoryNameButton:
                                     text: 'Салаты'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'salads'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 CategoryNameButton:
                                     text: 'Супы'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'soups'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 CategoryNameButton:
                                     text: 'Паста и пицца'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'pizza'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 CategoryNameButton:
                                     text: 'Закуски'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'snacks'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 CategoryNameButton:
                                     text: 'Сэндвичи'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'sandwiches'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 CategoryNameButton:
                                     text: 'Ризотто'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'risotto'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 CategoryNameButton:
                                     text: 'Напитки'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'drinks'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 CategoryNameButton:
                                     text: 'Соусы и маринады'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'sauces'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 CategoryNameButton:
                                     text: 'Бульоны'
+                                    height: 80
                                     on_release:
                                         category_manager.transition.direction = 'left'
-                                        category_manager.current = 'bouillons'
+                                        category_manager.current = 'book_preview'
+                                        category_manager.find_recipes_book(self.text)
                                 Label:
                                     size_hint: 1, None
                                     text: ''
-                    Screen:
-                        name: 'blanks'
+                Screen:
+                    name: 'book_preview'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        BoxLayout:
+                            size_hint: 1, .1
+                            Label:
+                                text: 'Просмотр рецепта'
+                                color: 1, 0.58, 0.25, 1
+                                size_hint: 1, 1
+                                text_size: self.size
+                                font_size: 20
+                                padding: [20, 10]
+                            Button:
+                                size_hint: .4, 1
+                                background_down: ''
+                                background_normal: ''
+                                on_release:
+                                    self.parent.parent.parent.parent.transition.direction = 'right'
+                                    self.parent.parent.parent.parent.current = 'category_menu'
+                                Image:
+                                    source: 'img/back_button.png'
+                                    center_x: self.parent.center_x
+                                    center_y: self.parent.center_y-10
+                                    size: 30, 20
                         ScrollView:
+                            canvas.before:
+                                Color:
+                                    rgba: 0, 0, 0, .1
+                                Rectangle:
+                                    size: self.size
+                                    pos: self.pos
                             CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
+                                BoxLayout:
+                                    orientation: 'vertical'
                                     size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.current = 'category_menu'
-                                            category_manager.transition.direction = 'right'
-                                    TitleCategoryLabel:
-                                        text: 'Заготовки'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
+                                    height: sum(x.height for x in self.children)
                                     Label:
                                         size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
+                                        text: ''
+                                        height: 70
+                                        canvas.before:
+                                            Color:
+                                                rgba: 0, 0, 0, .1
+                                            Rectangle:
+                                                size: self.size
+                                                pos: self.pos
+                Screen:
+                    name: 'recipe'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        BoxLayout:
+                            size_hint: 1, .1
+                            Label:
+                                text: 'Просмотр рецепта'
+                                color: 1, 0.58, 0.25, 1
+                                size_hint: 1, 1
+                                text_size: self.size
+                                font_size: 20
+                                padding: [20, 10]
+                            Button:
+                                size_hint: .4, 1
+                                background_down: ''
+                                background_normal: ''
+                                on_release:
+                                    self.parent.parent.parent.parent.transition.direction = 'right'
+                                    self.parent.parent.parent.parent.current = 'book_preview'
+                                Image:
+                                    source: 'img/back_button.png'
+                                    center_x: self.parent.center_x
+                                    center_y: self.parent.center_y-10
+                                    size: 30, 20
+                        ScrollView:
+                            canvas.before:
+                                Color:
+                                    rgba: 0, 0, 0, .1
+                                Rectangle:
+                                    size: self.size
+                                    pos: self.pos
+                            BoxLayout:
+                                canvas.before:
+                                    Color:
+                                        rgba: 1, 1, 1, 1
+                                    Rectangle:
+                                        size: self.width-20, self.height-20
+                                        pos: self.x+10, self.y+10
+                                orientation: 'vertical'
+                                size_hint: 1, None
+                                padding: [10, 10]
+                                BoxLayout:
+                                    padding: 5, 5
+                                    Carousel:
+                                        direction: 'right'
+                                        scroll_timeout: 300
+                                        ignore_perpendicular_swipes: True
+                                        loop: True
+                                        scroll_distance: 10
+                                Label:
+                                    text: ''
+                                    color: 0, 0, 0, 1
+                                    size_hint: 1, None
+                                    font_size: 18
+                                    height: 40
+                                    text_size: self.size
+                                    valign: 'center'
+                                    padding: 10, 0
+                                Label:
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0, 0, 0, .2
+                                        Rectangle:
+                                            size: self.width-10, self.height
+                                            pos: self.x+5, self.y
+                                    size_hint_y: None
+                                    height: 2
+                                Label:
+                                    size_hint: 1, None
+                                    text: ''
+                                    color: 0, 0, 0, 1
+                                    padding: 20, 10
+                                    multiline: True
+                                    font_size: 14
+                                Label:
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0, 0, 0, .2
+                                        Rectangle:
+                                            size: self.width-10, self.height
+                                            pos: self.x+5, self.y
+                                    size_hint_y: None
+                                    height: 2
+                                Label:
+                                    size_hint: 1, None
+                                    text: ''
+                                    color: 0, 0, 0, 1
+                                    padding: 20, 10
+                                    multiline: True
+                                    font_size: 14
+                                Label:
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0, 0, 0, .2
+                                        Rectangle:
+                                            size: self.width-10, self.height
+                                            pos: self.x+5, self.y
+                                    size_hint_y: None
+                                    height: 2
+                                Label:
+                                    size_hint: 1, None
+                                    text: ''
+                                    color: 0, 0, 0, 1
+                                    padding: 20, 10
+                                    multiline: True
+                                    font_size: 14
+                                Label:
+                                    size_hint: 1, None
 
-                    Screen:
-                        name: 'desserts'
-                        ScrollView:
-                            CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
-                                    size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.current = 'category_menu'
-                                            category_manager.transition.direction = 'right'
 
-                                    TitleCategoryLabel:
-                                        text: 'Выпечка и десерты'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
-                    Screen:
-                        name: 'main_dishes'
-                        ScrollView:
-                            CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
-                                    size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.current = 'category_menu'
-                                            category_manager.transition.direction = 'right'
-                                    TitleCategoryLabel:
-                                        text: 'Основные блюда'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
-                    Screen:
-                        name: 'breakfasts'
-                        ScrollView:
-                            CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
-                                    size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.transition.direction = 'right'
-                                            category_manager.current = 'category_menu'
-                                    TitleCategoryLabel:
-                                        text: 'Завтраки'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
-                    Screen:
-                        name: 'salads'
-                        ScrollView:
-                            CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
-                                    size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.transition.direction = 'right'
-                                            category_manager.current = 'category_menu'
-                                    TitleCategoryLabel:
-                                        text: 'Салаты'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
-                    Screen:
-                        name: 'soups'
-                        ScrollView:
-                            CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
-                                    size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.transition.direction = 'right'
-                                            category_manager.current = 'category_menu'
-                                    TitleCategoryLabel:
-                                        text: 'Супы'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
-                    Screen:
-                        name: 'pizza'
-                        ScrollView:
-                            CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
-                                    size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.transition.direction = 'right'
-                                            category_manager.current = 'category_menu'
-                                    TitleCategoryLabel:
-                                        text: 'Паста и пицца'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
-                    Screen:
-                        name: 'snacks'
-                        ScrollView:
-                            CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
-                                    size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.transition.direction = 'right'
-                                            category_manager.current = 'category_menu'
-                                    TitleCategoryLabel:
-                                        text: 'Закуски'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
-                    Screen:
-                        name: 'sandwiches'
-                        ScrollView:
-                            CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
-                                    size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.transition.direction = 'right'
-                                            category_manager.current = 'category_menu'
-                                    TitleCategoryLabel:
-                                        text: 'Сэндвичи'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
-                    Screen:
-                        name: 'risotto'
-                        ScrollView:
-                            CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
-                                    size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.transition.direction = 'right'
-                                            category_manager.current = 'category_menu'
-                                    TitleCategoryLabel:
-                                        text: 'Ризотто'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
-                    Screen:
-                        name: 'drinks'
-                        ScrollView:
-                            CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
-                                    size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.transition.direction = 'right'
-                                            category_manager.current = 'category_menu'
-                                    TitleCategoryLabel:
-                                        text: 'Напитки'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
-                    Screen:
-                        name: 'sauces'
-                        ScrollView:
-                            CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
-                                    size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.transition.direction = 'right'
-                                            category_manager.current = 'category_menu'
-                                    TitleCategoryLabel:
-                                        text: 'Соусы'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
-                    Screen:
-                        name: 'bouillons'
-                        ScrollView:
-                            CategoryGridLayout:
-                                GridLayout:
-                                    cols: 2
-                                    size_hint: 1, None
-                                    BackCategoryButton:
-                                        on_release:
-                                            category_manager.transition.direction = 'right'
-                                            category_manager.current = 'category_menu'
-                                    TitleCategoryLabel:
-                                        text: 'Бульоны'
-                                GridLayout:
-                                    cols:1
-                                    size_hint: 1, None
-                                    Label:
-                                        size_hint: 1, None
-                                        color: 1, 0, 0, 1
-                                        text: 'Здесь будут рецепты'
-                                        text_size: self.size
-                                        valign: 'center'
-                                        padding: [20, 0]
     #-------------------------------Third Screen----------------------------------------
         Screen:
             name: 'find'
@@ -470,19 +367,19 @@
                                 font_size: 20
                                 padding: [20, 0]
                         BoxLayout:
-                            padding: [20, 20]
+                            padding: [15, 15]
                             size_hint: 1, .23
                             Spinner:
                                 text: 'Категория'
-                                font_size: 14
+                                font_size: 13
                                 color: 1, .58, .25, 1
-                                values: 'Любая категория', 'Заготовки', 'Десерты', 'Основные блюда', 'Завтраки', 'Салаты', 'Супы', 'Пицца', "Закуски", "Сэндвичи", "Ризотто", "Напитки", "Соусы", "Маринады", "Роллы и суши"
+                                values: 'Любая категория', 'Заготовки', 'Выпечка и десерты', 'Главные блюда', 'Завтраки', 'Салаты', 'Супы', 'Паста и пицца', "Закуски", "Сэндвичи", "Ризотто", "Напитки", "Соусы и маринады", "Роллы и суши"
                                 size: 100, 44
                                 option_cls: 'FiltersSpinnerOption'
                                 background_normal: 'img/button_background1.png'
                             Spinner:
                                 text: 'Кухня'
-                                font_size: 14
+                                font_size: 13
                                 color: 1, .58, .25, 1
                                 values: 'Любая кухня', 'Мексиканская', 'Итальянская', 'Русская', 'Грузинская', 'Японская', 'Китайская'
                                 size: 100, 44
@@ -490,7 +387,7 @@
                                 background_normal: 'img/button_background1.png'
                             Spinner:
                                 text: 'Меню'
-                                font_size: 14
+                                font_size: 13
                                 color: 1, .58, .25, 1
                                 values: 'Любое меню', 'Безглютеновое', 'Вегетарианское', 'Веганское','Безлактозное', 'Детское', 'Низкокалорийное', 'Постное', 'При диабете'
                                 size: 100, 44
