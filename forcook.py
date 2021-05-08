@@ -100,8 +100,25 @@ class FindIngredientsButton(Button):
     pass
 
 
+class FavoriteButton(Button):
+    fav = 'img/star.png'
+    not_fav = 'img/star_grey.png'
+    status = not_fav
+
+    def change_img(self, text):
+        if self.status == self.not_fav:
+            self.status = self.fav
+            PreviewScreenBoxLayout.favorites += [text]
+            print(PreviewScreenBoxLayout.favorites)
+        else:
+            self.status = self.not_fav
+            PreviewScreenBoxLayout.favorites.remove(text)
+        self.children[0].source = self.status
+
+
 class FindIngredientsGlobalButton(Button):
     pass
+
 
 class BookScreenManager(ScreenManager):
     names = []
@@ -164,6 +181,9 @@ class PreviewButtons(ButtonBehavior):
     def create_recipe(self):
         content = self.manager.children[0].children[-1].children[0].children[0]
 
+        if self.recipe_info['name'] in PreviewScreenBoxLayout.favorites:
+            self.manager.children[0].children[-1].children[-1].children[-2].children[0].source = 'img/star.png'
+
         content.children[-1].height = 300
         content.children[-1].children[0].clear_widgets()
         content.children[-1].children[0].add_widget(AsyncImage(source=f'img/img_for_recipes/{self.recipe_info["img_folder_name"]}'))
@@ -213,7 +233,7 @@ class PreviewImage(PreviewButtons, Image):
 
 class GoodListGridLayout(GridLayout):
     good_list_1 = []
-    good_list_2 = []
+    good_list_2 = [] #global
 
     def __init__(self, **args):
         super().__init__()
@@ -225,14 +245,11 @@ class GoodListGridLayout(GridLayout):
             self.remove_widget(self.children[2])
         gl = GoodGridLayout()
         tl = TestLabel(text=text, padding = [30, 0], color=(0, 0, 0, 1))
-        with tl.canvas:
-            Color(1, 1, 1, 1)
-            Rectangle()
         gl.add_widget(tl, 1)
         self.add_widget(gl, 2)
         self.good_list_1 += [text]
         self.children[1].children[0].size = (30, 30)
-        print(self.good_list_1)
+        self.children[1].size = (30, 30)
 
     def add_good_global(self, text):
         if text in self.good_list_2:
@@ -247,11 +264,18 @@ class GoodListGridLayout(GridLayout):
         if len(self.good_list_1) == 1:
             self.add_widget(EmptyLabel(), 2)
             self.children[1].children[0].size = (0, 0)
+            self.children[1].size = (0, 0)
 
     def remove_all_widget_global(self):
         for i in range(len(self.good_list_2)):
             self.remove_widget(self.children[1])
         self.good_list_2.clear()
+
+    def add_good_in_find(self):
+        for good in self.good_list_1:
+            self.add_good_global(good)
+            print(good)
+        print(self.good_list_2)
 
 
 class GoodTextInput(TextInput):
@@ -504,28 +528,16 @@ class FindGlobalButton(Button):
 
 
 class PreviewScreenBoxLayout(BoxLayout):
+    favorites = []
     def delete_when_back(self):
         if type(self.children[-1]) != Label:
             self.remove_widget(self.children[-1])
             self.delete_when_back()
 
+    def empty_list(self):
+        if len(self.favorites) == 0:
+            self.children[1].size_hint = (1, 1)
 
-class DeleteFavButton(Button):
-    pass
-
-
-class FavoritListGridLayout(GridLayout):
-    def __init__(self, **args):
-        super().__init__()
-        self.fav_number = 6
-
-    def delete_fav(self, id_name):
-        self.remove_widget(id_name)
-        self.fav_number -= 1
-
-#    def add_fav(self):
-        #через бд
-# это написал кто-то слишком умный
 
 
 class ForCookApp(App):

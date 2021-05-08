@@ -46,12 +46,7 @@
                 ScrollView:
                     id: scroll_view
                     child_1: good_list
-                    canvas:
-                        Color:
-                            rgba: 0, 0, 0, .1
-                        Rectangle:
-                            size: self.width-10, self.height
-                            pos: self.x+5, self.y
+                    canvas.before:
                     GoodListGridLayout:
                         id: good_list
                         cols: 1
@@ -64,6 +59,10 @@
                             padding: [50, 0]
                             background_down: ''
                             background_normal: ''
+                            size: 0, 0
+                            on_release:
+                                sm.current = 'find'
+                                sm.children[0].children[-1].children[0].children[-1].children[-4].children[0].add_good_in_find()
                             Image:
                                 source: "img/loupe.png"
                                 center_x: self.parent.center_x
@@ -71,6 +70,7 @@
                                 size: 0, 0
                         Label:
                             size_hint: 1, None
+
 
         #------------------Second Screen----------------------------
 
@@ -85,7 +85,7 @@
                         TitleLabel:
                             text: 'Рецепты'
                         ScrollView:
-                            canvas:
+                            canvas.before:
                                 Color:
                                     rgba: 0, 0, 0, .1
                                 Rectangle:
@@ -442,6 +442,7 @@
                                 Label:
                                     size_hint: 1, None
                                     opacity: 0
+                                    height: 30
                         FindGlobalButton:
                             size_hint: .2, .3
                             pos_hint: {'center_x': .5, 'center_y': .5}
@@ -519,12 +520,24 @@
                             Label:
                                 text: 'Просмотр рецепта'
                                 color: 1, 0.58, 0.25, 1
-                                size_hint: 1, 1
+                                size_hint: .5, 1
                                 text_size: self.size
                                 font_size: 20
                                 padding: [20, 10]
+                            FavoriteButton:
+                                size_hint: .1, 1
+                                background_normal: ''
+                                background_down: ''
+                                on_release:
+                                    self.change_img(self.parent.parent.children[-2].children[0].children[-2].text)
+                                Image:
+                                    source: self.parent.status
+                                    center_x: self.parent.center_x
+                                    center_y: self.parent.center_y-5
+                                    size: 30, 30
+
                             Button:
-                                size_hint: .4, 1
+                                size_hint: .3, 1
                                 background_down: ''
                                 background_normal: ''
                                 on_release:
@@ -625,90 +638,51 @@
 
         Screen:
             name: 'favorites'
-            BoxLayout:
-                orientation: 'vertical'
-                TitleLabel:
-                    text: 'Избранные рецепты'
+            ScreenManager:
+                Screen:
+                    name: 'preview_recipes'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        BoxLayout:
+                            size_hint: 1, .12
+                            TitleLabel:
+                                text: 'Избранное'
+                                color: 1, 0.58, 0.25, 1
+                                size_hint: 1, 1
+                                text_size: self.size
+                                #font_size: 20
+                                padding: [20, 10]
+                        ScrollView:
+                            canvas.before:
+                                Color:
+                                    rgba: 0, 0, 0, .1
+                                Rectangle:
+                                    size: self.size
+                                    pos: self.pos
 
-                ScrollView:
-                    FavoritListGridLayout:
-                        id: fav_list
-                        cols: 1
-                        height: self.minimum_height
-                        Label:
-                            size_hint: 1, .3
-                            text: ''
-                        BoxLayout:
-                            orientation: 'horizontal'
-                            id: fav1
-                            cols: 2
-                            size_hint: 1, .8
-                            ListLabel:
-                                text: 'Борщьч'
-                                padding: [50, 0]
-                            ListLabel:
-                                text: 'ингредиенты'
-                                padding: [60, 0]
-                            DeleteFavButton:
-                                on_release:
-                                    fav_list.delete_fav(fav1)
-                        BoxLayout:
-                            id: fav2
-                            cols: 3
-                            size_hint: 1, .8
-                            ListLabel:
-                                text: 'Салатег "Цезаръ"'
-                                padding: [50, 0]
-                            DeleteFavButton:
-                                on_release:
-                                    fav_list.delete_fav(fav2)
-                        BoxLayout:
-                            id: fav3
-                            cols: 4
-                            size_hint: 1, .8
-                            ListLabel:
-                                text: 'Котлетки по-флотельски'
-                                padding: [50, 0]
-                            DeleteFavButton:
-                                on_release:
-                                    fav_list.delete_fav(fav3)
+                            PreviewScreenBoxLayout:
+                                orientation: 'vertical'
+                                size_hint: 1, None
+                                height: sum(x.height for x in self.children)
+                                Label:
+                                    text: 'У вас пока нет сохраненных рецептов'
+                                    size_hint: 1, None
+                                    color: 0, 0, 0, .3
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0, 0, 0, .1
+                                        Rectangle:
+                                            size: self.size
+                                            pos: self.pos
+                                Label:
+                                    size_hint: 1, None
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0, 0, 0, .1
+                                        Rectangle:
+                                            size: self.size
+                                            pos: self.pos
 
-                        BoxLayout:
-                            id: fav4
-                            cols: 5
-                            size_hint: 1, .8
-                            ListLabel:
-                                text: 'Мамины пельмешки из морозилки'
-                                padding: [50, 0]
-                            DeleteFavButton:
-                                on_release:
-                                    fav_list.delete_fav(fav4)
-
-                        BoxLayout:
-                            id: fav5
-                            cols: 6
-                            size_hint: 1, .8
-                            ListLabel:
-                                text: 'Кисель из пакетика'
-                                padding: [50, 0]
-                            DeleteFavButton:
-                                on_release:
-                                    fav_list.delete_fav(fav5)
-
-                        BoxLayout:
-                            id: fav6
-                            cols: 7
-                            size_hint: 1, .8
-                            ListLabel:
-                                text: 'Горячий сок из сока'
-                                padding: [50, 0]
-                            DeleteFavButton:
-                                on_release:
-                                    fav_list.delete_fav(fav6)
-
-                        Label:
-                            size_hint: 1, None
-                            text: ''
 
     #------------------------Menu----------------------------------
 
@@ -721,44 +695,60 @@
         button4: favorites
         MenuButton:
             id: fidge
-            #text: 'fridge'
             on_release:
                 root.manager.transition.duration = 0
                 root.manager.current = 'fidge'
-                root.box_layout.button2.color = (.67, 0.67, 0.67, 1)
-                root.box_layout.button3.color = (.67, 0.67, 0.67, 1)
-                root.box_layout.button4.color = (.67, 0.67, 0.67, 1)
+                root.box_layout.button1.children[0].source = "img/fridge.png"
+                root.box_layout.button2.children[0].source = "img/book_grey.png"
+                root.box_layout.button3.children[0].source = "img/loupe_grey.png"
+                root.box_layout.button4.children[0].source = "img/star_grey.png"
             Image:
-                source: "C:/Users/saraz/OneDrive/Рабочий стол/Новая папка/проект тмп/изображения/кальк2.png"
+                source: "img/fridge.png"
                 center_x: self.parent.center_x
                 center_y: self.parent.center_y
+                size: 45, 45
         MenuButton:
-            text: 'book'
             id: book
             on_release:
                 root.manager.transition.duration = 0
                 root.manager.current = 'book'
-                root.box_layout.button1.color = (.67, 0.67, 0.67, 1)
-                root.box_layout.button3.color = (.67, 0.67, 0.67, 1)
-                root.box_layout.button4.color = (.67, 0.67, 0.67, 1)
+                root.box_layout.button1.children[0].source = "img/fridge_grey.png"
+                root.box_layout.button2.children[0].source = "img/book.png"
+                root.box_layout.button3.children[0].source = "img/loupe_grey.png"
+                root.box_layout.button4.children[0].source = "img/star_grey.png"
+            Image:
+                source: "img/book_grey.png"
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+                size: 55, 55
         MenuButton:
             id: find
-            text: 'find'
             on_release:
                 root.manager.transition.duration = 0
                 root.manager.current = 'find'
-                root.box_layout.button1.color = (.67, 0.67, 0.67, 1)
-                root.box_layout.button2.color = (.67, 0.67, 0.67, 1)
-                root.box_layout.button4.color = (.67, 0.67, 0.67, 1)
+                root.box_layout.button1.children[0].source = "img/fridge_grey.png"
+                root.box_layout.button2.children[0].source = "img/book_grey.png"
+                root.box_layout.button3.children[0].source = "img/loupe.png"
+                root.box_layout.button4.children[0].source = "img/star_grey.png"
+            Image:
+                source: "img/loupe_grey.png"
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+                size: 45, 45
         MenuButton:
             id: favorites
-            text: 'favorites'
             on_release:
                 root.manager.transition.duration = 0
                 root.manager.current = 'favorites'
-                root.box_layout.button3.color = (.67, 0.67, 0.67, 1)
-                root.box_layout.button2.color = (.67, 0.67, 0.67, 1)
-                root.box_layout.button1.color = (.67, 0.67, 0.67, 1)
+                root.box_layout.button1.children[0].source = "img/fridge_grey.png"
+                root.box_layout.button2.children[0].source = "img/book_grey.png"
+                root.box_layout.button3.children[0].source = "img/loupe_grey.png"
+                root.box_layout.button4.children[0].source = "img/star.png"
+            Image:
+                source: "img/star_grey.png"
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+                size: 45, 45
 
 
 
