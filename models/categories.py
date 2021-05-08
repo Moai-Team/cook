@@ -10,6 +10,7 @@ class Recipe_has_categories(Base):
     child = relationship("Categories")
     parent = relationship("Recipe")
 
+
 class Categories(Base):
     __tablename__ = 'categories'
 
