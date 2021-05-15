@@ -72,6 +72,74 @@ def print_preview(dict, grid, screen):
 
     grid.add_widget(main, 1)
 
+
+def read_favorites():
+    file = open('favorites.txt', 'r')
+    res = []
+
+    for line in file:
+        if line == '\n':
+            continue
+        res += [line]
+    for i in range(len(res)):
+        if res[i][-1] == '\n':
+            res[i] = res[i][:-1]
+
+    file.close()
+
+    return res
+
+def read_ingredients():
+    res = []
+    with open('ingredients.txt', 'r') as file:
+        for line in file:
+            if line == '\n':
+                continue
+
+            if line[-1] == '\n':
+                res += [line[:-1]]
+            else:
+                res += [line]
+    return res
+
+def find_all_information(recipe_info):
+    for _ in session.query(Recipe.name, Recipe.calories, Recipe.img_folder_name, Recipe.history, Recipe.advice,
+                           Recipe.instruction, Cuisine.cuisine_name, Menu.menu_name, Categories.category_name, Time.minutes).filter(and_(Recipe.name == recipe_info['name'],
+                                                                      Recipe_has_cuisine.recipe_id == Recipe.id,
+                                                                      Recipe_has_cuisine.cuisine_id == Cuisine.id,
+                                                                      Recipe_has_menu.menu_id == Menu.id,
+                                                                      Recipe_has_menu.recipe_id == Recipe.id,
+                                                                      Recipe_has_categories.categories_id == Categories.id,
+                                                                      Recipe_has_categories.recipe_id == Recipe.id,
+                                                                      Recipe.time_id == Time.id)):
+        result = get_dict_list_from_result([_])
+        return result[0]
+
+
+class PreviewScreenBoxLayout(BoxLayout):
+    favorites = read_favorites()
+
+    def delete_when_back(self):
+        if type(self.children[-1]) != Label:
+            self.remove_widget(self.children[-1])
+            self.delete_when_back()
+
+    def empty_list(self):
+        if len(self.favorites) == 0:
+            self.children[1].size_hint = (1, 1)
+
+    def favorite_preview(self):
+        for i in range(2, len(self.children)):
+            self.remove_widget(self.children[1])
+        if len(self.favorites) != 0:
+            self.children[-1].size = [0, 0]
+            self.children[-1].opacity = 0
+        for i in range(len(self.favorites)):
+            dict_2 = {'name': self.favorites[i]}
+            res = find_all_information(dict_2)
+            print_preview(res, self, self.parent.parent.parent.parent)
+
+
 class MainStructure(FloatLayout):
     pass
 
@@ -105,15 +173,31 @@ class FavoriteButton(Button):
     not_fav = 'img/star_grey.png'
     status = not_fav
 
-    def change_img(self, text):
-        if self.status == self.not_fav:
-            self.status = self.fav
-            PreviewScreenBoxLayout.favorites += [text]
-            print(PreviewScreenBoxLayout.favorites)
-        else:
+    def change_status(self, text):
+        if text in PreviewScreenBoxLayout.favorites:
             self.status = self.not_fav
-            PreviewScreenBoxLayout.favorites.remove(text)
+        else:
+            self.status = self.fav
+        self.change_list(text)
+
+    def change_img(self):
         self.children[0].source = self.status
+
+    def change_list(self, text):
+        if text in PreviewScreenBoxLayout.favorites:
+            PreviewScreenBoxLayout.favorites.remove(text)
+            with open('favorites.txt', 'r') as file:
+                res = file.readlines()
+            with open('favorites.txt', 'w') as file:
+                for line in res:
+                    if line == text or line == '\n' or line[:-1] == text:
+                        continue
+                    else:
+                        file.write(line)
+        else:
+            PreviewScreenBoxLayout.favorites += [text]
+            with open('favorites.txt', 'a') as file:
+                file.write('\n' + text)
 
 
 class FindIngredientsGlobalButton(Button):
@@ -163,26 +247,18 @@ class PreviewButtons(ButtonBehavior):
     def on_release(self):
         self.manager.transition.direction = 'left'
         self.manager.current = 'recipe'
-        self.find_all_information()
+        self.recipe_info = find_all_information(self.recipe_info)
         self.create_recipe()
-
-    def find_all_information(self):
-        for _ in session.query(Recipe.name, Recipe.calories, Recipe.img_folder_name, Recipe.history, Recipe.advice,
-                               Recipe.instruction, Cuisine.cuisine_name, Menu.menu_name, Categories.category_name).filter(and_(Recipe.name == self.recipe_info['name'],
-                                                                          Recipe_has_cuisine.recipe_id == Recipe.id,
-                                                                          Recipe_has_cuisine.cuisine_id == Cuisine.id,
-                                                                          Recipe_has_menu.menu_id == Menu.id,
-                                                                          Recipe_has_menu.recipe_id == Recipe.id,
-                                                                          Recipe_has_categories.categories_id == Categories.id,
-                                                                          Recipe_has_categories.recipe_id == Recipe.id)):
-            result = get_dict_list_from_result([_])
-            self.recipe_info = result[0]
 
     def create_recipe(self):
         content = self.manager.children[0].children[-1].children[0].children[0]
 
         if self.recipe_info['name'] in PreviewScreenBoxLayout.favorites:
-            self.manager.children[0].children[-1].children[-1].children[-2].children[0].source = 'img/star.png'
+            FavoriteButton.status = FavoriteButton.fav
+        else:
+            FavoriteButton.status = FavoriteButton.not_fav
+
+        self.manager.children[0].children[-1].children[-1].children[-2].children[0].source = FavoriteButton.status
 
         content.children[-1].height = 300
         content.children[-1].children[0].clear_widgets()
@@ -232,24 +308,47 @@ class PreviewImage(PreviewButtons, Image):
 
 
 class GoodListGridLayout(GridLayout):
-    good_list_1 = []
+    good_list_1 = read_ingredients()
     good_list_2 = [] #global
+    check = False
 
     def __init__(self, **args):
         super().__init__()
 
+    def check_good(self):
+        self.check = True
+        if self.good_list_1:
+            for child in self.children[2:-1]:
+                self.remove_widget(child)
+        for text in self.good_list_1:
+            self.add_good(text)
+        self.check = False
+
+    def del_from_file(self, text):
+        with open('ingredients.txt', 'w') as file:
+            for good in self.good_list_1:
+                if good == text:
+                    continue
+                else:
+                    file.write(good + '\n')
+
+
     def add_good(self, text):
-        if text in self.good_list_1:
+        if text in self.good_list_1 and not self.check:
             return
-        if not self.good_list_1:
-            self.remove_widget(self.children[2])
+        if not self.good_list_1 or self.check:
+            self.children[-1].size_hint = [0, 0]
         gl = GoodGridLayout()
         tl = TestLabel(text=text, padding = [30, 0], color=(0, 0, 0, 1))
         gl.add_widget(tl, 1)
         self.add_widget(gl, 2)
-        self.good_list_1 += [text]
+        if not self.check:
+            self.good_list_1 += [text]
         self.children[1].children[0].size = (30, 30)
         self.children[1].size = (30, 30)
+        with open('ingredients.txt', 'w') as file:
+            for good in self.good_list_1:
+                file.write(good + '\n')
 
     def add_good_global(self, text):
         if text in self.good_list_2:
@@ -261,8 +360,8 @@ class GoodListGridLayout(GridLayout):
         self.good_list_2 += [text]
 
     def empty_list(self):
-        if len(self.good_list_1) == 1:
-            self.add_widget(EmptyLabel(), 2)
+        if len(self.good_list_1) == 0:
+            self.children[-1].size = [100, 100]
             self.children[1].children[0].size = (0, 0)
             self.children[1].size = (0, 0)
 
@@ -274,8 +373,6 @@ class GoodListGridLayout(GridLayout):
     def add_good_in_find(self):
         for good in self.good_list_1:
             self.add_good_global(good)
-            print(good)
-        print(self.good_list_2)
 
 
 class GoodTextInput(TextInput):
@@ -527,22 +624,10 @@ class FindGlobalButton(Button):
         manager.current = 'preview_recipes'
 
 
-class PreviewScreenBoxLayout(BoxLayout):
-    favorites = []
-    def delete_when_back(self):
-        if type(self.children[-1]) != Label:
-            self.remove_widget(self.children[-1])
-            self.delete_when_back()
-
-    def empty_list(self):
-        if len(self.favorites) == 0:
-            self.children[1].size_hint = (1, 1)
-
-
-
 class ForCookApp(App):
-    def build(self):
-        return MainStructure()
+     def build(self):
+        ms = MainStructure()
+        return ms
 
 
 if __name__ == '__main__':

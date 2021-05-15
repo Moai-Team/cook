@@ -26,6 +26,19 @@
                         text: 'Мой холодильник'
                         size_hint: 1, 1
                     Button:
+                        size_hint: .5, .5
+                        background_normal: ''
+                        background_down: ''
+                        on_release:
+                            self.parent.parent.children[0].children[0].check_good()
+                        Image:
+                            source: "img/check.png"
+                            center_x: self.parent.center_x
+                            center_y: self.parent.center_y
+                            size: 23, 23
+
+
+                    Button:
                         color: 1, 0.58, 0.25, 1
                         size_hint: .2, .5
                         text_size: self.size
@@ -250,6 +263,18 @@
                                 text_size: self.size
                                 font_size: 20
                                 padding: [20, 10]
+                            FavoriteButton:
+                                size_hint: .1, 1
+                                background_normal: ''
+                                background_down: ''
+                                on_release:
+                                    self.change_status(self.parent.parent.children[-2].children[0].children[-2].text)
+                                    self.change_img()
+                                Image:
+                                    source: self.parent.status
+                                    center_x: self.parent.center_x
+                                    center_y: self.parent.center_y-5
+                                    size: 30, 30
                             Button:
                                 size_hint: .4, 1
                                 background_down: ''
@@ -529,7 +554,8 @@
                                 background_normal: ''
                                 background_down: ''
                                 on_release:
-                                    self.change_img(self.parent.parent.children[-2].children[0].children[-2].text)
+                                    self.change_status(self.parent.parent.children[-2].children[0].children[-2].text)
+                                    self.change_img()
                                 Image:
                                     source: self.parent.status
                                     center_x: self.parent.center_x
@@ -683,6 +709,130 @@
                                             size: self.size
                                             pos: self.pos
 
+                Screen:
+                    name: 'recipe'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        BoxLayout:
+                            size_hint: 1, .1
+                            Label:
+                                text: 'Просмотр рецепта'
+                                color: 1, 0.58, 0.25, 1
+                                size_hint: .5, 1
+                                text_size: self.size
+                                font_size: 20
+                                padding: [20, 10]
+                            FavoriteButton:
+                                size_hint: .1, 1
+                                background_normal: ''
+                                background_down: ''
+                                on_release:
+                                    self.change_status(self.parent.parent.children[-2].children[0].children[-2].text)
+                                    self.change_img()
+                                Image:
+                                    source: self.parent.status
+                                    center_x: self.parent.center_x
+                                    center_y: self.parent.center_y-5
+                                    size: 30, 30
+
+                            Button:
+                                size_hint: .3, 1
+                                background_down: ''
+                                background_normal: ''
+                                on_release:
+                                    self.parent.parent.parent.parent.transition.direction = 'right'
+                                    self.parent.parent.parent.parent.current = 'preview_recipes'
+                                    self.parent.parent.parent.parent.children[0].children[0].children[0].children[0].favorite_preview()
+                                Image:
+                                    source: 'img/back_button.png'
+                                    center_x: self.parent.center_x
+                                    center_y: self.parent.center_y-10
+                                    size: 30, 20
+                        ScrollView:
+                            canvas.before:
+                                Color:
+                                    rgba: 0, 0, 0, .1
+                                Rectangle:
+                                    size: self.size
+                                    pos: self.pos
+                            BoxLayout:
+                                canvas.before:
+                                    Color:
+                                        rgba: 1, 1, 1, 1
+                                    Rectangle:
+                                        size: self.width-20, self.height-20
+                                        pos: self.x+10, self.y+10
+                                orientation: 'vertical'
+                                size_hint: 1, None
+                                padding: [10, 10]
+                                BoxLayout:
+                                    padding: 5, 5
+                                    Carousel:
+                                        direction: 'right'
+                                        scroll_timeout: 300
+                                        ignore_perpendicular_swipes: True
+                                        loop: True
+                                        scroll_distance: 10
+                                Label:
+                                    text: ''
+                                    color: 0, 0, 0, 1
+                                    size_hint: 1, None
+                                    font_size: 18
+                                    height: 40
+                                    text_size: self.size
+                                    valign: 'center'
+                                    padding: 10, 0
+                                Label:
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0, 0, 0, .2
+                                        Rectangle:
+                                            size: self.width-10, self.height
+                                            pos: self.x+5, self.y
+                                    size_hint_y: None
+                                    height: 2
+                                Label:
+                                    size_hint: 1, None
+                                    text: ''
+                                    color: 0, 0, 0, 1
+                                    padding: 20, 10
+                                    multiline: True
+                                    font_size: 14
+                                Label:
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0, 0, 0, .2
+                                        Rectangle:
+                                            size: self.width-10, self.height
+                                            pos: self.x+5, self.y
+                                    size_hint_y: None
+                                    height: 2
+                                Label:
+                                    size_hint: 1, None
+                                    text: ''
+                                    color: 0, 0, 0, 1
+                                    padding: 20, 10
+                                    multiline: True
+                                    font_size: 14
+                                Label:
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0, 0, 0, .2
+                                        Rectangle:
+                                            size: self.width-10, self.height
+                                            pos: self.x+5, self.y
+                                    size_hint_y: None
+                                    height: 2
+                                Label:
+                                    size_hint: 1, None
+                                    text: ''
+                                    color: 0, 0, 0, 1
+                                    padding: 20, 10
+                                    multiline: True
+                                    font_size: 14
+                                Label:
+                                    size_hint: 1, None
+
 
     #------------------------Menu----------------------------------
 
@@ -740,6 +890,7 @@
             on_release:
                 root.manager.transition.duration = 0
                 root.manager.current = 'favorites'
+                root.manager.children[0].children[0].children[0].children[0].children[0].children[0].favorite_preview()
                 root.box_layout.button1.children[0].source = "img/fridge_grey.png"
                 root.box_layout.button2.children[0].source = "img/book_grey.png"
                 root.box_layout.button3.children[0].source = "img/loupe_grey.png"
@@ -833,10 +984,12 @@
 <GoodGridLayout@GridLayout>
     cols: 2
     size_hint: 1, None
+    height: 80
     DeleteGoodButton:
         on_release:
-            self.parent.parent.empty_list()
             self.parent.parent.good_list_1.remove(self.parent.children[1].text)
+            self.parent.parent.empty_list()
+            self.parent.parent.del_from_file(self.parent.children[1].text)
             self.parent.parent.remove_widget(self.parent)
 
 
